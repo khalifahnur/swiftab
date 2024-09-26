@@ -157,9 +157,9 @@ const TabLayout: React.FC = () => {
               ),
             }}
           />
-          {/* reservation screen */}
+          {/* reserve screen */}
           <Tabs.Screen
-            name="explore"
+            name="reserve"
             options={{
               tabBarIcon: ({ focused }) => (
                 <View
