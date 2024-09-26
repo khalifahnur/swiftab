@@ -14,13 +14,34 @@ export const Colors = {
     icon: '#687076',
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
+    tabBackground:'#999'
   },
   dark: {
     text: '#ECEDEE',
-    background: '#151718',
+    //background: '#151718',
+    background:'#f8f8f8',
     tint: tintColorDark,
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
+    activeTab:'#FFD700',
+    notActiveTab:'#fbfbfb',
+    tabBackground:'#999'
   },
+  
+  
 };
+
+export const primary={
+  black:'#26292D',
+  white:'#EDF1F4',
+  lightBlue:'#D9DEE8'
+}
+
+export const secondary={
+  verylightblue:'#C6CBE6',
+  lightblue:'#A2A9C9',
+  gray:'#BFC2C4',
+  verydarkgray:'#888A8C',
+  yellow:'#FFD100'
+}
