@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import moment from 'moment';
 import { TabBarIcon } from '../navigation/TabBarIcon';
 import { AntDesign } from '@expo/vector-icons';
+import Search from './Search';
 
 export default function Header() {
     const [greeting, setGreeting] = useState<string>('');
@@ -21,7 +22,8 @@ export default function Header() {
         setGreeting(greetingText);
       }, [greeting]);
   return (
-    <View style={styles.header}>
+    <View >
+      <View style={styles.header}>
       <View>
         <Text style={styles.greetings}>{greeting},</Text>
         <Text style={styles.name}>Khalif</Text>
@@ -29,6 +31,10 @@ export default function Header() {
       <Pressable style={styles.cart}>
         <AntDesign name="shoppingcart" size={20} color="black" />
         </Pressable>
+        </View>
+        <View style={styles.search}>
+          <Search />
+        </View>
     </View>
   )
 }
@@ -51,5 +57,8 @@ const styles = StyleSheet.create({
         backgroundColor:'#e8e8e8',
         padding:10,
         borderRadius:20,
-    }
+    },
+    search:{
+      marginVertical:10,
+    },
 })
