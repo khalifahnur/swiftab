@@ -1,12 +1,12 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import NewSubHeader from './NewSubHeader'
+import Search from './Search'
+import { color } from '@/constants/Colors'
 
 export default function Promotions() {
   return (
     <>
-    <NewSubHeader headerTitle='Promotions'  />
-    <View style={{ paddingHorizontal: 20, marginBottom: 25 }}>
+    <View style={{ marginBottom: 20,marginTop:20 }}>
         <View style={styles.imageHeader}>
           <View
             style={{
@@ -17,34 +17,50 @@ export default function Promotions() {
               height: 95,
             }}
           >
-            <View style={{ flexDirection: "column", alignItems: "center" }}>
+            <View style={{ flexDirection: "column", alignItems: "center",justifyContent:'space-between' }}>
               <Text
                 style={{
-                  fontSize: 15,
+                  fontSize: 13,
                   fontWeight: "500",
-                  color: "#fff",
+                  color: color.gray,
                 }}
               >
                 Get special offer 
               </Text>
+              <View style={{flexDirection:'row',gap:10}}>
+              <Text
+                style={{
+                  fontSize: 10,
+                  fontWeight: "500",
+                  color: color.gray,
+                }}
+              >
+                up to 
+              </Text>
               <Text
                 style={{
                   fontSize: 15,
                   fontWeight: "500",
-                  color: "#fff",
+                  color: color.black,
                 }}
               >
-                up to 30%
+                30%
               </Text>
+
+              </View>
+              
+              <TouchableOpacity style={{backgroundColor:color.gray,padding:10,borderRadius:12}}>
               <Text
                 style={{
-                  fontSize: 13,
+                  fontSize: 10,
                   fontWeight: "400",
-                  color: "#fff",
+                  color: color.black,
                 }}
               >
                 Book Now
               </Text>
+              </TouchableOpacity>
+              
             </View>
             <View style={{ width: 80, height: 80, alignItems: "center",flexDirection:'row',gap:10 }}>
                 <View style={styles.line} />
@@ -63,11 +79,13 @@ export default function Promotions() {
 
 const styles = StyleSheet.create({
     imageHeader: {
-        marginTop: 5,
-        backgroundColor: "#4d81f1",
+        marginTop: 20,
+        //backgroundColor: "#4d81f1",
+        backgroundColor:color.green,
         borderRadius: 15,
         borderWidth: 2,
-        borderColor: "#4d81f1",
+        //borderColor: "#4d81f1",
+        borderColor:color.green,
         shadowColor: "#000",
         shadowOffset: {
           width: 10,
@@ -80,8 +98,7 @@ const styles = StyleSheet.create({
       line:{
         height: 50,
         borderWidth: 2,
-        borderColor: '#1e1e1e',
+        borderColor: color.gray,
         borderRadius: 50, 
-
       },
 })

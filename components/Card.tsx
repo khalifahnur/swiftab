@@ -1,17 +1,18 @@
-import { Image, StyleSheet, Text, View, ImageSourcePropType } from 'react-native'
+import { Image, StyleSheet, Text, View, ImageSourcePropType, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Ionicons } from '@expo/vector-icons';
-import { primary } from '@/constants/Colors';
+import { color, primary } from '@/constants/Colors';
 
 type cardProps = {
     image:ImageSourcePropType,
     restaurantName:string;
     rate:number;
     location:string;
+    handlePress:()=>void;
 }
-export default function Card({image,restaurantName,rate,location}:cardProps) {
+export default function Card({image,restaurantName,rate,location,handlePress}:cardProps) {
   return (
-    <View style={styles.card}>
+    <TouchableOpacity onPress={handlePress} style={styles.card}>
             <Image source={image} style={styles.restaurantImage} />
             <View style={styles.detailsContainer}>
               <View style={styles.detail}>
@@ -29,13 +30,13 @@ export default function Card({image,restaurantName,rate,location}:cardProps) {
 
               
             </View>
-          </View>
+          </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
     card: {
-      backgroundColor: primary.white,
+      backgroundColor: color.white,
       shadowColor: "#000",
       shadowOffset: { width: 1, height: 2 },
       shadowOpacity: 0.9,
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       marginHorizontal: 10,
       width: 220,
+      marginBottom:5
     },
     restaurantImage: {
       width: "100%",

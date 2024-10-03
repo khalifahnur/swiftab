@@ -1,6 +1,8 @@
 import {FlatList, Image, Platform, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import React from "react";
 import Card from "../Card";
+import { color } from "@/constants/Colors";
+import { useRouter } from "expo-router";
 
 
 type restaurantsProps = {
@@ -56,7 +58,11 @@ review: {
 export default function Restaurants({data}:restaurantsProps) {
   const window = useWindowDimensions();
   const item_width = Platform.OS === "ios" ? window.width * 0.89 : window.width * 0.55;
+  const route = useRouter();
 
+  const NavigateHandler = (data:any)=>{
+    route.push({pathname:'/screens/restaurantdetails',params:{data:data}})
+  }
   return (
     <>
     <FlatList
@@ -66,7 +72,7 @@ export default function Restaurants({data}:restaurantsProps) {
       decelerationRate={Platform.OS === "ios" ? 0 : 0.98}
       renderItem={({ item }) => {
         return (
-          <Card image={item.image} restaurantName={item.restaurantName} rate={item.rate} location={item.location} />
+          <Card image={item.image} restaurantName={item.restaurantName} rate={item.rate} location={item.location} handlePress={()=>NavigateHandler(item)} />
         );
       }}
       //estimatedItemSize={200}
@@ -81,5 +87,6 @@ export default function Restaurants({data}:restaurantsProps) {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
+    backgroundColor:color.white
   },
 });

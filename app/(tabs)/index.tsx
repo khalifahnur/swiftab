@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Header from '@/components/Home/Header';
 
-import {primary } from '@/constants/Colors';
+import {color, primary, secondary } from '@/constants/Colors';
 import Container from '@/components/Home/Container';
 import { StatusBar } from 'expo-status-bar';
 
@@ -13,11 +13,8 @@ import { StatusBar } from 'expo-status-bar';
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar />
-        <View style={styles.header}>
-          <Header />
-        </View>
-        <Container />     
+      <StatusBar style='dark' backgroundColor='#f8f8f8' />
+          <Container />
     </SafeAreaView>
   );
 }
@@ -25,10 +22,9 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container:{
     flex:1,
-    backgroundColor:primary.lightBlue,
+    //backgroundColor:"#fbfbfb",
+    backgroundColor:color.white,
+
   },
-  header:{
-    paddingVertical:10,
-    paddingHorizontal:20,
-  },
+
 });

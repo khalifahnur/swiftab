@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { color } from '@/constants/Colors';
 
 type newSubHeaderTitleProps ={
     headerTitle:string;

@@ -14,7 +14,8 @@ import {
   useColorScheme,
 } from "react-native";
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors, primary, secondary } from '@/constants/Colors';
+import { color, Colors, primary, secondary } from '@/constants/Colors';
+import { BlurView } from 'expo-blur';
 
 const TabLayout: React.FC = () => {
   const window = useWindowDimensions();
@@ -26,13 +27,13 @@ const TabLayout: React.FC = () => {
         <Tabs
           screenOptions={{
             headerShown: false,
-            // tabBarBackground: () => (
-            //   <BlurView
-            //     tint="systemMaterialDark"
-            //     intensity={100}
-            //     style={StyleSheet.absoluteFill}
-            //   />
-            // ),
+            tabBarBackground: () => (
+              <BlurView
+                tint="default"
+                intensity={200}
+                style={StyleSheet.absoluteFill}
+              />
+            ),
           }}
           tabBar={({ state, descriptors, navigation }) => (
             <View
@@ -41,8 +42,8 @@ const TabLayout: React.FC = () => {
                 justifyContent: "center",
                 borderRadius: 30,
                 //backgroundColor: Colors[colorScheme??'light'].tabBackground,
-                backgroundColor:primary.black,
-                bottom: 2,
+                backgroundColor:color.gray,
+                bottom: 5,
                 left: 20,
                 right: 20,
                 elevation: 0,
@@ -110,7 +111,7 @@ const TabLayout: React.FC = () => {
                     size={focused ? 20 : 25}
                     color={focused ? "#00932C" : "#1E1E1E"}
                   /> */}
-                  <TabBarIcon name={focused ? 'home':'home-outline'} size={20} color={focused?secondary.yellow:primary.white} />
+                  <TabBarIcon name={focused ? 'home':'home-outline'} size={20} color={focused?color.green:color.black} />
                   {/* {focused && (
                     <View>
                       <Text style={{ color: "#00932C", fontSize: 9 }}>Home</Text>
@@ -120,9 +121,9 @@ const TabLayout: React.FC = () => {
               ),
             }}
           />
-          {/* search screen */}
+          {/* favourite screen */}
           <Tabs.Screen
-            name="search"
+            name="wishlist"
             options={{
               tabBarIcon: ({ focused }) => (
                 <View
@@ -131,7 +132,7 @@ const TabLayout: React.FC = () => {
                     { alignItems: "center" },
                   ]}
                 >
-                  <TabBarIcon name={focused ? 'search' : 'search-outline'} size={20} color={focused?secondary.yellow:primary.white} />
+                  <TabBarIcon name={focused ? 'heart' : 'heart-outline'} size={20} color={focused?color.green:color.black} />
                 </View>
               ),
             }}
@@ -168,7 +169,7 @@ const TabLayout: React.FC = () => {
                     { alignItems: "center" },
                   ]}
                 >
-                  <TabBarIcon name={focused ? 'calendar' : 'calendar-outline'} size={20} color={focused?secondary.yellow:primary.white} />
+                  <TabBarIcon name={focused ? 'calendar' : 'calendar-outline'} size={20} color={focused?color.green:color.black} />
                 </View>
               ),
             }}
@@ -181,7 +182,7 @@ const TabLayout: React.FC = () => {
                 <View
                   
                 >
-                  <TabBarIcon name={focused ? 'settings' : 'settings-outline'} size={20} color={focused?secondary.yellow:primary.white} />
+                  <TabBarIcon name={focused ? 'settings' : 'settings-outline'} size={20} color={focused?color.green:color.black} />
                 </View>
               ),
             }}
@@ -194,21 +195,20 @@ const TabLayout: React.FC = () => {
 
 const styles = StyleSheet.create({
   ActiveIconStyle: {
-    //backgroundColor: "#fff",
     padding: 8,
     borderRadius: 32,
   },
   container: {
     flex: 1,
-    justifyContent: "center", // Center vertically
-    alignItems: "center", // Center horizontally
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "white",
   },
   iconContainer: {
     position: "absolute",
     bottom: -2,
-    left: "0%", // Move the left edge to the center
-    transform: [{ translateX: -32 }], // Move it back by half of its width to center it
+    left: "0%",
+    transform: [{ translateX: -32 }],
   },
   iconWrapper: {
     width: 64,

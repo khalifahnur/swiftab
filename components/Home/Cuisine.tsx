@@ -1,6 +1,7 @@
 import {FlatList, Image, Platform, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import React from "react";
 import NewSubHeader from "./NewSubHeader";
+import { color } from "@/constants/Colors";
 
 const data = [
     {
@@ -56,7 +57,7 @@ export default function Cuisine() {
         return (
           <View style={styles.subContainer}>
             <Image source={item.image} style={styles.restaurantImage} /> 
-            <Text>{item.name}</Text>      
+            <Text style={{color:color.white,fontSize:13}}>{item.name}</Text>      
           </View>
         );
       }}
@@ -71,6 +72,9 @@ export default function Cuisine() {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
+    backgroundColor:color.green,
+    paddingVertical:10
+
   },
   subContainer: {
     justifyContent: 'center',
@@ -78,10 +82,10 @@ const styles = StyleSheet.create({
     marginHorizontal:10
   },
   restaurantImage: {
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     borderRadius: 50,
-    borderWidth: 1,
-    borderColor: '#fff',
+    borderWidth: 3,
+    borderColor: color.gray,
   },
 });

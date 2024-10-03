@@ -45,3 +45,11 @@ export const secondary={
   verydarkgray:'#888A8C',
   yellow:'#FFD100'
 }
+
+export const color = {
+  navy:'#003366',
+  green:'#008080',
+  white:'#fff',
+  gray:'#cdd5d7',
+  black:'#000'
+}
