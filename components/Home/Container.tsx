@@ -94,11 +94,11 @@ export default function Container() {
         ListFooterComponent={() => (
           <>
             <Cuisine />
-            {/* {exampleData.map(num => (
+            {exampleData.map(num => (
               <View key={num}>
                 <Text>{num}</Text>
               </View>
-            ))} */}
+            ))}
           </>
         )}
         ListFooterComponentStyle={{backgroundColor:color.white,}}

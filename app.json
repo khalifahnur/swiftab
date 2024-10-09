@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.lifkha.swiftab"
     },
     "web": {
       "bundler": "metro",
@@ -27,10 +28,21 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsDownloadToken": "sk.eyJ1IjoibGlma2hhIiwiYSI6ImNtMXdpdnVnejBjZTEyanM5aWl5cHdjZnMifQ.NAoD6a6lcDVly8JugZ6TTA"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c375945a-3b31-45bf-ac84-caad9905bb27"
+      }
     }
   }
 }

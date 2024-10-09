@@ -1,326 +1,328 @@
-import { FlashList } from '@shopify/flash-list';
-import React, { useRef, useState } from 'react';
-import { Pressable, StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import React, { useRef } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  Dimensions,
+  StatusBar,
+} from "react-native";
 import Animated, {
+  Extrapolation,
+  FadeIn,
+  interpolate,
+  interpolateColor,
+  runOnJS,
+  useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
+import { useNavigation } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons";
+import { useLocalSearchParams } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
+import SectionTabs from "./SectionTabs";
+import About from "./About";
+import Menu from "./Menu";
+import Reviews from "./Reviews";
+import Info from "./Info";
+import { makeShareable } from "react-native-reanimated/lib/typescript/reanimated2/shareables";
+import { ScrollView } from "react-native";
+import { color } from "@/constants/Colors";
 
-const exampleStyles = StyleSheet.create({
-  squaresContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 16,
-  },
-  square: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 100,
-    height: 100,
-    backgroundColor: '#f8f9ff',
-    borderRadius: 20,
-  },
-  listContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 6,
-  },
-  listWrapper: {
-    borderRadius: 16,
-    backgroundColor: '#f8f9ff',
-  },
-  listItem: {
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 2,
-    padding: 8,
-    paddingHorizontal: 32,
-  },
-});
+export const { height: sHeight, width: sWidth } = Dimensions.get("screen");
 
-const SECTION_HEIGHT = 350;
+const ImageHeight = 280;
+const SECTION_HEIGHT = 300;
 
-const BRAND_COLORS = ['#fa7f7c', '#b58df1', '#ffe780', '#82cab2'];
+const HeaderAnim1 = () => {
+  const params = useLocalSearchParams();
+  const data = JSON.parse(params.data);
+  console.log(data);
+  const menu = data.menu;
+  const reviews = data.review;
+  const navigation = useNavigation();
 
-const SECTIONS = [
-  {
-    name: 'Overview',
-    content: 'You can put here ✨ anything ✨ you want!',
-  },
-  {
-    name: 'Squares',
-    content: (
-      <View style={exampleStyles.squaresContainer}>
-        <View style={exampleStyles.square}>
-          <Text>1</Text>
-        </View>
-        <View style={exampleStyles.square}>
-          <Text>2</Text>
-        </View>
-        <View style={exampleStyles.square}>
-          <Text>3</Text>
-        </View>
-      </View>
-    ),
-  },
-  {
-    name: 'Shopping list',
-    content: (
-      <View style={exampleStyles.listContainer}>
-        <View style={exampleStyles.listWrapper}>
-          <Text style={exampleStyles.listItem}>🍎 Apple </Text>
-        </View>
-        <View style={exampleStyles.listWrapper}>
-          <Text style={exampleStyles.listItem}>🍌 Banana</Text>
-        </View>
-        <View style={exampleStyles.listWrapper}>
-          <Text style={exampleStyles.listItem}>🥖 Bread</Text>
-        </View>
-      </View>
-    ),
-  },
-];
-
-function debounce(func, timeout = 100) {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      func(...args);
-    }, timeout);
-  };
-}
-
-const useSelectedStyle = (selectedItem, item) =>
-  useAnimatedStyle(() => ({
-    fontWeight: selectedItem.value === item ? '600' : '400',
-    borderBottomWidth: selectedItem.value === item ? 1 : 0,
-  }));
-
-const TableOfContentsElement = ({
-  item,
-  index,
-  visibleIndex,
-  sectionCardsRef,
-}) => {
-  const style = useSelectedStyle(visibleIndex, index);
-
-  return (
-    <Pressable
-      onPress={() => {
-        sectionCardsRef.current?.scrollToIndex({ index, animated: true });
-        visibleIndex.value = index;
-      }}
-      style={[sectionListStyles.tableOfContentsElement]}>
-      <Animated.Text
-        style={[
-          style,
-          sectionListStyles.tableOfContentsElement,
-          //tableOfContentsElementTextStyle,
-        ]}>
-        {item}
-      </Animated.Text>
-    </Pressable>
-  );
-};
-
-const TableOfContents = ({
-  data,
-  visibleIndex,
-  sectionCardsRef,
-  tableOfContentsRef,
-}) => {
-  return (
-    <View style={sectionListStyles.tableOfContents}>
-      <FlashList
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        renderItem={({ item, index }) => (
-          <TableOfContentsElement
-            item={item}
-            visibleIndex={visibleIndex}
-            index={index}
-            sectionCardsRef={sectionCardsRef}
-          />
-        )}
-        data={data}
-        estimatedItemSize={52}
-        ref={tableOfContentsRef}
-      />
-    </View>
-  );
-};
-
-const Container = () => {
-  const selectedItem = useSharedValue('');
   const visibleIndex = useSharedValue(0);
-  const sectionNames = SECTIONS.map((s) => s.name);
-  const sectionCardsRef = useRef(null);
-  const tableOfContentsRef = useRef(null);
+  const topTabsRef = useRef(null);
+  const sectionRef = useRef(null);
 
-  return (
-    <SafeAreaView style={sectionListStyles.cardsContainer}>
-      <TableOfContents
-        data={sectionNames}
-        visibleIndex={visibleIndex}
-        sectionCardsRef={sectionCardsRef}
-        tableOfContentsRef={tableOfContentsRef}
-      />
-      <SectionCards
-        sections={SECTIONS}
-        visibleIndex={visibleIndex}
-        tableOfContentsRef={tableOfContentsRef}
-        sectionCardsRef={sectionCardsRef}
-      />
-    </SafeAreaView>
-  );
-};
+  // Refs for section measurements
+  const aboutSectionRef = useRef(null);
+  const menuSectionRef = useRef(null);
+  const reviewSectionRef = useRef(null);
 
-const sectionListStyles = StyleSheet.create({
-  cardsContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    height: 600,
-  },
-  flex: {
-    flex: 1,
-  },
-  tableOfContentsElement: {
-    padding: 4,
-    marginHorizontal: 4,
-    margin: 8,
-    overflow: 'hidden',
-  },
-  tableOfContents: {
-    top: 0,
-  },
-});
+  // Array holding all the section refs for scrolling
+  const sections = [aboutSectionRef, menuSectionRef, reviewSectionRef];
 
-const SectionCards = ({
-  sections,
-  visibleIndex,
-  sectionCardsRef,
-  tableOfContentsRef,
-}) => {
-  //const { colorScheme } = useColorScheme();
-  const heights = sections.map((_) => SECTION_HEIGHT);
+  const heights = Array.isArray(data) ? data.map(() => SECTION_HEIGHT) : [];
   // heights => [350,350,350]
 
-  const getOffsetStarts = () =>
-    heights.map((v, i) => heights.slice(0, i).reduce((x, acc) => x + acc, 0));
+  const scrollY = useSharedValue(0);
 
- // getOffsetStarts() =>[0,350,700]
-
-  const onScroll = (event) => {
-    const offset = event.nativeEvent?.contentOffset?.y;
-    // offset => distance scrolled in opposite direction (0,270)
-    console.log("offset=>",offset)
-
-    if (offset !== undefined) {
-      const distancesFromTop = getOffsetStarts().map((v) =>
-        Math.abs(v - offset)
-      );
-
-      const newIndex = distancesFromTop.indexOf(
-        Math.min.apply(null, distancesFromTop)
-      );
-
-      console.log(newIndex)
-      if (visibleIndex.value !== newIndex) {
-        tableOfContentsRef.current?.scrollToIndex({
-          index: newIndex,
-          animated: true,
-        });
-      }
-      visibleIndex.value = newIndex;
-    }
-  };
-
-//   const sectionNameStyle = useAnimatedStyle(() => ({
-//     color: colorScheme === 'light' ? '#001a72' : '#f8f9ff',
-//   }));
-
-  const renderItem = ({ item }) => {
-    return (
-      <View>
-        <Animated.Text style={[sectionCardStyles.header]}>
-          {item.name}
-        </Animated.Text>
-        <SectionCardsElement>
-          <Text style={sectionCardStyles.content}>{item.content}</Text>
-        </SectionCardsElement>
-      </View>
+  const getOffsetStarts = () => {
+    "worklet"; // Mark this function as a worklet
+    return heights.map((v, i) =>
+      heights.slice(0, i).reduce((x, acc) => x + acc, 0)
     );
   };
 
+  const handleOffset = (offset) => {
+    const distancesFromTop = getOffsetStarts().map((v) => Math.abs(v - offset));
+    const newIndex = distancesFromTop.indexOf(
+      Math.min.apply(null, distancesFromTop)
+    );
+
+    if (visibleIndex.value !== newIndex) {
+      topTabsRef.current?.scrollToIndex({
+        index: newIndex,
+        animated: true,
+      });
+    }
+    visibleIndex.value = newIndex;
+  };
+
+  const handleScroll = useAnimatedScrollHandler((event) => {
+    scrollY.value = event.contentOffset.y;
+    const offset = event.contentOffset?.y;
+
+    if (offset !== undefined) {
+      runOnJS(handleOffset)(offset);
+    }
+  });
+
+  const onScroll = useAnimatedScrollHandler((event) => {
+    scrollY.value = event.contentOffset.y;
+  });
+
+  const scrollAnimatedStyles = useAnimatedStyle(() => {
+    const translateY = interpolate(
+      scrollY.value,
+      [0, 320],
+      [0, -ImageHeight - 40],
+      Extrapolation.CLAMP
+    );
+    return { transform: [{ translateY }] };
+  });
+
+  const headerViewAnimatedStyles = useAnimatedStyle(() => {
+    const backgroundColor = interpolateColor(
+      scrollY.value,
+      [0, 320],
+      ["transparent", color.green]
+    );
+    return { backgroundColor };
+  });
+
+  const titleAnimatedStyles = (fadeIn: boolean) =>
+    useAnimatedStyle(() => {
+      const outputRange = fadeIn ? [0, 0, 1] : [1, 0, 0];
+      const opacity = interpolate(scrollY.value, [0, 120, 320], outputRange);
+      return { opacity };
+    });
+
+  const animatedImageStyles = useAnimatedStyle(() => {
+    const scale = interpolate(scrollY.value, [0, 320], [1.4, 1], {
+      extrapolateRight: Extrapolation.CLAMP,
+    });
+    return { transform: [{ scale }] };
+  });
+
+  //const exampleData = Array.from({ length: 1000 }, (_, i) => i + 1);
   return (
-    <View style={sectionListStyles.flex}>
-      <FlashList
-        ref={sectionCardsRef}
-        estimatedItemSize={52}
-        estimatedFirstItemOffset={0}
-        renderItem={renderItem}
-        data={sections}
-        onScrollBeginDrag={onScroll}
-        onScrollEndDrag={onScroll}
-        onScroll={debounce(onScroll)}
-        onMomentumScrollBegin={onScroll}
-        onMomentumScrollEnd={onScroll}
-      />
-    </View>
+    <>
+      <View style={styles.container}>
+        <StatusBar translucent backgroundColor={"transparent"} />
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <AntDesign name="left" size={20} color="#fff" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.heartButton}
+        >
+          <AntDesign name="hearto" size={20} color="#fff" />
+        </TouchableOpacity>
+        
+        <Animated.View style={[styles.headerImage, animatedImageStyles]}>
+          <Image
+            source={data.image}
+            resizeMode="contain"
+            style={{ width: sWidth, zIndex: -1 }}
+          />
+          <LinearGradient
+            colors={["transparent", "transparent", "#112233"]}
+            style={styles.imageOverlay}
+          />
+        </Animated.View>
+
+        <Animated.View style={scrollAnimatedStyles}>
+          <Animated.View style={[styles.headerView, headerViewAnimatedStyles]}>
+            <View>
+              <Animated.Text style={[styles.title, titleAnimatedStyles(false)]}>
+                {data.restaurantName}
+              </Animated.Text>
+              <Animated.Text style={[styles.title2, titleAnimatedStyles(true)]}>
+                {data.restaurantName}
+              </Animated.Text>
+            </View>
+          </Animated.View>
+
+          <Animated.ScrollView
+            onScroll={onScroll}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 120 }}
+            style={{ backgroundColor: color.gray, zIndex: 99 }}
+          >
+            <View style={styles.innerContainer}>
+              {/* info */}
+              <Info data={data} />
+              <View
+                style={{
+                  width: "100%",
+                  borderWidth: 1,
+                  marginTop: 20,
+                  borderColor: "#999",
+                }}
+              />
+              
+              {/* Top Tabs */}
+              {/* <SectionTabs
+                visibleIndex={visibleIndex}
+                sectionRef={sectionRef}
+                topTabRef={topTabsRef}
+                sections={sections}
+              /> */}
+              
+              {/* Section Content */}
+              <ScrollView ref={sectionRef}>
+                {/* About Section */}
+                <View ref={aboutSectionRef}>
+                  <About data={data} />
+                </View>
+
+                {/* Menu Section */}
+                <View ref={menuSectionRef}>
+                  <Menu menu={menu} />
+                </View>
+
+                {/* Reviews Section */}
+                <View ref={reviewSectionRef}>
+                  <Reviews reviews={reviews} />
+                </View>
+              </ScrollView>
+            </View>
+          </Animated.ScrollView>
+        </Animated.View>
+      </View>
+      {/* footer */}
+      <View style={{ backgroundColor: color.gray, padding: 10 }}>
+        <TouchableOpacity
+          style={{ padding: 20, backgroundColor: color.green, borderRadius: 10 }}
+        >
+          <Text
+            style={{
+              color: "#fff",
+              fontSize: 15,
+              fontWeight: "500",
+              textAlign: "center",
+            }}
+          >
+            Reserve Now
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 };
 
-const getRandomBrandColor = () => {
-  const colorIndex = Math.floor(Math.random() * BRAND_COLORS.length);
-  return BRAND_COLORS[colorIndex];
-};
-
-const SectionCardsElement = ({ children }) => {
-  const [backgroundColor, setBackgroundColor] = useState(getRandomBrandColor());
-
-  return (
-    <View style={[sectionCardStyles.container, { backgroundColor }]}>
-      {children}
-      <Pressable
-        style={sectionCardStyles.button}
-        onPress={() => setBackgroundColor(getRandomBrandColor())}>
-        <Text style={sectionCardStyles.buttonText}>
-          Toggle section color 🎨
-        </Text>
-      </Pressable>
-    </View>
-  );
-};
-
-const sectionCardStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
-    height: SECTION_HEIGHT,
-    margin: 16,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    borderRadius: 24,
+    flex: 1,
+    backgroundColor: "#112233",
   },
-  header: {
-    textAlign: 'center',
-    fontSize: 24,
-    fontWeight: 'bold',
+  headerImage: {
+    width: "100%",
+    height: ImageHeight,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  content: {
-    color: '#001a72',
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#1e1e1e" + "30",
+    zIndex: 9999,
+    position: "absolute",
+    top: 5,
+    left: 20,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  button: {
-    backgroundColor: '#f8f9ff',
-    padding: 12,
-    borderRadius: 48,
+  heartButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#1e1e1e" + "30",
+    zIndex: 9999,
+    position: "absolute",
+    top: 5,
+    right: 20,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  buttonText: {
-    color: '#001a72',
-    padding: '0.5rem',
+  headerView: {
+    width: "100%",
+    justifyContent: "center",
+    paddingVertical: 15,
+  },
+  title: {
+    fontSize: 38,
+    fontWeight: "600",
+    color: "orange",
+    marginHorizontal: 20,
+    position: "absolute",
+  },
+  title2: {
+    fontSize: 18,
+    fontWeight: "500",
+    color: "orange",
+    marginHorizontal: 20,
+    textAlign: "center",
+    marginTop: 35,
+  },
+  innerContainer: {
+    margin: 20,
+  },
+  listItem: {
+    width: 100,
+    height: 100,
+    borderRadius: 14,
+    backgroundColor: "#eee",
+    marginRight: 16,
+  },
+  text: {
+    fontSize: 20,
+    color: "#eee",
+    fontWeight: "600",
+  },
+  text2: {
+    fontSize: 16,
+    color: "#112233",
+    marginTop: 10,
+    fontWeight: "600",
+  },
+  description: {
+    fontSize: 16,
+    color: "#e0e0e0",
+    textAlign: "justify",
+  },
+  imageOverlay: {
+    height: ImageHeight + 50,
+    ...StyleSheet.absoluteFillObject,
   },
 });
 
-export default Container;
+export default HeaderAnim1;

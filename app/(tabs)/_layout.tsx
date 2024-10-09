@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Tabs } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Ionicons } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import {
   View,
   TouchableOpacity,
@@ -13,9 +13,9 @@ import {
   Button,
   useColorScheme,
 } from "react-native";
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { color, Colors, primary, secondary } from '@/constants/Colors';
-import { BlurView } from 'expo-blur';
+import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { color, Colors, primary, secondary } from "@/constants/Colors";
+import { BlurView } from "expo-blur";
 
 const TabLayout: React.FC = () => {
   const window = useWindowDimensions();
@@ -24,171 +24,201 @@ const TabLayout: React.FC = () => {
 
   return (
     <>
-        <Tabs
-          screenOptions={{
-            headerShown: false,
-            tabBarBackground: () => (
-              <BlurView
-                tint="default"
-                intensity={200}
-                style={StyleSheet.absoluteFill}
-              />
-            ),
-          }}
-          tabBar={({ state, descriptors, navigation }) => (
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          tabBarBackground: () => (
+            <BlurView
+              tint="default"
+              intensity={200}
+              style={StyleSheet.absoluteFill}
+            />
+          ),
+        }}
+        tabBar={({ state, descriptors, navigation }) => (
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              borderRadius: 30,
+              //backgroundColor: Colors[colorScheme??'light'].tabBackground,
+              backgroundColor: color.gray,
+              bottom: 5,
+              left: 20,
+              right: 20,
+              elevation: 0,
+              height: 55,
+              width: BOTTOM_WIDTH,
+              position: "absolute",
+            }}
+          >
             <View
               style={{
                 flexDirection: "row",
-                justifyContent: "center",
-                borderRadius: 30,
-                //backgroundColor: Colors[colorScheme??'light'].tabBackground,
-                backgroundColor:color.gray,
-                bottom: 5,
-                left: 20,
-                right: 20,
-                elevation: 0,
-                height: 55,
-                width: BOTTOM_WIDTH,
-                position: "absolute",
+                justifyContent: "space-between",
+                width: "100%",
+                alignItems: "center",
+                paddingHorizontal: 10,
               }}
             >
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  width: "100%",
-                  alignItems: "center",
-                  paddingHorizontal: 10,
-                }}
-              >
-                {state.routes.map((route, index) => {
-                  const { options } = descriptors[route.key];
-                  const isFocused = state.index === index;
+              {state.routes.map((route, index) => {
+                const { options } = descriptors[route.key];
+                const isFocused = state.index === index;
 
-                  const onPress = () => {
-                    const event = navigation.emit({
-                      type: "tabPress",
-                      target: route.key,
-                      canPreventDefault: true,
-                    });
+                const onPress = () => {
+                  const event = navigation.emit({
+                    type: "tabPress",
+                    target: route.key,
+                    canPreventDefault: true,
+                  });
 
-                    if (!event.defaultPrevented) {
-                        navigation.navigate(route.name);
-                    }
-                  };
+                  if (!event.defaultPrevented) {
+                    navigation.navigate(route.name);
+                  }
+                };
 
-                  return (
-                    <TouchableOpacity
-                      accessibilityRole="button"
-                      testID={options.tabBarTestID}
-                      accessibilityState={isFocused ? { selected: true } : {}}
-                      key={index}
-                      onPress={onPress}
-                      style={{ flex: 1, alignItems: "center" }}
-                    >
-                      {options.tabBarIcon &&
-                        options.tabBarIcon({ focused: isFocused })}
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
+                return (
+                  <TouchableOpacity
+                    accessibilityRole="button"
+                    testID={options.tabBarTestID}
+                    accessibilityState={isFocused ? { selected: true } : {}}
+                    key={index}
+                    onPress={onPress}
+                    style={{ flex: 1, alignItems: "center" }}
+                  >
+                    {options.tabBarIcon &&
+                      options.tabBarIcon({ focused: isFocused })}
+                  </TouchableOpacity>
+                );
+              })}
             </View>
-          )}
-        >
-          {/* index screen */}
-          <Tabs.Screen
-            name="index"
-            options={{
-              tabBarIcon: ({ focused }) => (
-                <View
+          </View>
+        )}
+      >
+        {/* index screen */}
+        <Tabs.Screen
+          name="index"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+              <View
                 style={[
                   focused && styles.ActiveIconStyle,
                   { alignItems: "center" },
                 ]}
-                >
-                  {/* <Ionicons
+              >
+                {/* <Ionicons
                     name="home-outline"
                     size={focused ? 20 : 25}
                     color={focused ? "#00932C" : "#1E1E1E"}
                   /> */}
-                  <TabBarIcon name={focused ? 'home':'home-outline'} size={20} color={focused?color.green:color.black} />
-                  {/* {focused && (
+                <TabBarIcon
+                  name={focused ? "home" : "home-outline"}
+                  size={20}
+                  color={focused ? color.green : color.black}
+                />
+                {/* {focused && (
                     <View>
                       <Text style={{ color: "#00932C", fontSize: 9 }}>Home</Text>
                     </View>
                   )} */}
-                </View>
-              ),
-            }}
-          />
-          {/* favourite screen */}
-          <Tabs.Screen
-            name="wishlist"
-            options={{
-              tabBarIcon: ({ focused }) => (
-                <View
-                  style={[
-                    focused && styles.ActiveIconStyle,
-                    { alignItems: "center" },
-                  ]}
-                >
-                  <TabBarIcon name={focused ? 'heart' : 'heart-outline'} size={20} color={focused?color.green:color.black} />
-                </View>
-              ),
-            }}
-          />
-          {/* report screen */}
-          <Tabs.Screen
-            name="scan"
-            options={{
-              
-              tabBarIcon: ({ focused }) => (
-                <View style={styles.container}>
-                  <View style={styles.iconContainer}>
-                    <View style={styles.iconWrapper}>
-                      <AntDesign
-                        name="scan1"
-                        size={30}
-                        color='#b1b1b1'
-                        style={styles.icon}
-                      />
-                    </View>
+              </View>
+            ),
+          }}
+        />
+        {/* favourite screen */}
+        <Tabs.Screen
+          name="wishlist"
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <View
+                style={[
+                  focused && styles.ActiveIconStyle,
+                  { alignItems: "center" },
+                ]}
+              >
+                <TabBarIcon
+                  name={focused ? "heart" : "heart-outline"}
+                  size={20}
+                  color={focused ? color.green : color.black}
+                />
+              </View>
+            ),
+          }}
+        />
+        {/* scan screen */}
+        <Tabs.Screen
+          name="scan"
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <View style={styles.container}>
+                <View style={styles.iconContainer}>
+                  <View style={styles.iconWrapper}>
+                    <AntDesign
+                      name="scan1"
+                      size={30}
+                      color="#b1b1b1"
+                      style={styles.icon}
+                    />
                   </View>
                 </View>
-              ),
-            }}
-          />
-          {/* reserve screen */}
-          <Tabs.Screen
-            name="reserve"
-            options={{
-              tabBarIcon: ({ focused }) => (
-                <View
-                  style={[
-                    focused && styles.ActiveIconStyle,
-                    { alignItems: "center" },
-                  ]}
-                >
-                  <TabBarIcon name={focused ? 'calendar' : 'calendar-outline'} size={20} color={focused?color.green:color.black} />
-                </View>
-              ),
-            }}
-          />
-          {/* settiings screen */}
-          <Tabs.Screen
-            name="settings"
-            options={{
-              tabBarIcon: ({ focused }) => (
-                <View
-                  
-                >
-                  <TabBarIcon name={focused ? 'settings' : 'settings-outline'} size={20} color={focused?color.green:color.black} />
-                </View>
-              ),
-            }}
-          />
-        </Tabs>
+              </View>
+            ),
+          }}
+        />
+        {/* reserve screen */}
+        <Tabs.Screen
+          name="(toptabs)"
+          options={{
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTitleAlign: "center",
+            headerStyle: { backgroundColor: "#f5f5f5" },
+            headerTitle: () => (
+              <Text
+                style={{
+                  fontSize: 22,
+                  fontWeight: "600",
+                  color: "#000",
+                  textAlign: "center",
+                }}
+              >
+                Reservation
+              </Text>
+            ),
 
+            tabBarIcon: ({ focused }) => (
+              <View
+                style={[
+                  focused && styles.ActiveIconStyle,
+                  { alignItems: "center" },
+                ]}
+              >
+                <TabBarIcon
+                  name={focused ? "calendar" : "calendar-outline"}
+                  size={20}
+                  color={focused ? color.green : color.black}
+                />
+              </View>
+            ),
+          }}
+        />
+        {/* settings screen */}
+        <Tabs.Screen
+          name="settings"
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <View>
+                <TabBarIcon
+                  name={focused ? "settings" : "settings-outline"}
+                  size={20}
+                  color={focused ? color.green : color.black}
+                />
+              </View>
+            ),
+          }}
+        />
+      </Tabs>
     </>
   );
 };

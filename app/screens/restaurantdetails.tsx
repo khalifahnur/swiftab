@@ -15,7 +15,6 @@ export default function RestaurantDetailsScreen() {
   });
   return (
     <SafeAreaView style={styles.container}>
-      <Header />
       <Container />
     </SafeAreaView>
   );

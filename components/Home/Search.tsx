@@ -9,7 +9,7 @@ export default function Search() {
 
   return (
     <View style={styles.search}>
-      <Pressable style={styles.innerSearch} >
+      <Pressable style={styles.innerSearch} onPress={()=>router.navigate('/screens/search')} >
         <EvilIcons name="search" size={24} color="black" />
         <Text>Search ...</Text>
       </Pressable>
