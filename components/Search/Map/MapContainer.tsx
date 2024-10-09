@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import Mapbox, { Camera, UserLocation, MapView, ShapeSource, SymbolLayer, Image, Images } from '@rnmapbox/maps';
+import Mapbox, { Camera, UserLocation, MapView, ShapeSource, SymbolLayer, Image, Images, CircleLayer } from '@rnmapbox/maps';
 import * as Location from 'expo-location'; 
 import Restaurants from '@/components/Restaurants.json';
 import pin from '@/assets/pin.png';
 import { point, featureCollection } from '@turf/helpers';
+import { color } from '@/constants/Colors';
 
 export default function MapContainer() {
     const mapbox_key = process.env.EXPO_PUBLIC_MAPBOX_KEY;
@@ -38,7 +39,8 @@ export default function MapContainer() {
                 visible={true}
                 showsUserHeadingIndicator={true}
             />
-            <ShapeSource id='restaurants' shape={AvailableRes} >
+            <ShapeSource id='restaurants' cluster shape={AvailableRes} onPress={(e)=>JSON.stringify(e,null,2)} >
+                <CircleLayer id='cluster' style={{circleColor:color.green}} />
                 <SymbolLayer
                     id='restaurants-icons'
                     style={{
