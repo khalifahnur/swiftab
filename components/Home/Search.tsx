@@ -8,29 +8,32 @@ export default function Search() {
   const router = useRouter();
 
   return (
-    <View style={styles.search}>
-      <Pressable style={styles.innerSearch} onPress={()=>router.navigate('/screens/search')} >
+    <Pressable
+      style={styles.search}
+      onPress={() => router.navigate("/screens/search")}
+    >
+      <View style={styles.innerSearch}>
         <EvilIcons name="search" size={24} color="black" />
         <Text>Search ...</Text>
-      </Pressable>
-    </View>
+      </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   search: {
-    width:'90%',
-    paddingHorizontal:20,
+    width: "90%",
+    paddingHorizontal: 20,
     padding: 5,
     borderWidth: 2,
     borderColor: primary.white,
     borderRadius: 8,
     backgroundColor: "#fff",
   },
-  innerSearch:{
-    flexDirection:'row',
-    gap:20,
-    padding:5,
-    alignItems:'center'
+  innerSearch: {
+    flexDirection: "row",
+    gap: 20,
+    padding: 5,
+    alignItems: "center",
   },
 });
