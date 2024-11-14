@@ -13,7 +13,7 @@ export default function Search() {
       onPress={() => router.navigate("/screens/search")}
     >
       <View style={styles.innerSearch}>
-        <EvilIcons name="search" size={24} color="black" />
+        <EvilIcons name="search" size={20} color="black" />
         <Text>Search ...</Text>
       </View>
     </Pressable>

@@ -1,22 +1,18 @@
 import { color } from '@/constants/Colors';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import ProfileImage from './ProfileImage';
+
 
 const Container = () => {
   return (
     <View style={styles.container}>
       {/* Profile Image and Name */}
       <View style={styles.profileContainer}>
-        <Image
-          source={require('@/assets/images/user.jpeg')}
-          style={styles.profileImage}
-        />
-        <Text style={styles.profileName}>Khalif Noor</Text>
-        <TouchableOpacity style={styles.editIconContainer}>
-          <Icon name="pencil-outline" size={18} color="#fff" />
-        </TouchableOpacity>
+        <ProfileImage />
       </View>
 
       <TouchableOpacity style={styles.premiumBanner}>
@@ -34,7 +30,7 @@ const Container = () => {
       {/* Menu Options */}
       <View style={styles.menuContainer}>
         {menuItems.map((item) => (
-          <TouchableOpacity key={item.title} style={styles.menuItem}>
+          <TouchableOpacity key={item.title} style={styles.menuItem} onPress={()=>router.push(item.url)}>
             <View style={styles.menuIconContainer}>
               <Icon name={item.icon} size={24} color="#6F7A8A" />
             </View>
@@ -48,20 +44,18 @@ const Container = () => {
 };
 
 const menuItems = [
-  { title: 'Account Details', icon: 'person-outline' },
-  { title: 'My Orders', icon: 'receipt-outline' },
-  { title: 'Settings', icon: 'settings-outline' },
-  { title: 'Help Center', icon: 'help-circle-outline' },
-  { title: 'Language', icon: 'language-outline' },
-  { title: 'Invite Friends', icon: 'people-outline' },
+  { title: 'Account Details', icon: 'person-outline',url:'/screens/account' },
+  { title: 'My Orders', icon: 'receipt-outline',url:'/screens/account' },
+  { title: 'Settings', icon: 'settings-outline',url:'/screens/setting' },
+  { title: 'Help Center', icon: 'help-circle-outline',url:'/screens/help' },
+  { title: 'Language', icon: 'language-outline',url:'/screens/account' },
+  { title: 'Invite Friends', icon: 'people-outline',url:'/screens/account' },
 ];
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
     paddingHorizontal: 20,
-    paddingTop: 40,
+    paddingTop: 10,
   },
   header: {
     flexDirection: 'row',
@@ -77,24 +71,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-  },
-  profileName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 10,
-  },
-  editIconContainer: {
-    position: 'absolute',
-    right:155,
-    top:60,
-    backgroundColor: color.green,
-    borderRadius: 15,
-    padding: 2,
-  },
+  
   premiumBanner: {
     flexDirection: 'row',
     alignItems: 'center',

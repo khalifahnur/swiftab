@@ -1,97 +1,125 @@
-import {
-    Alert,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
 import React, { useState } from "react";
-import InputField from "@/components/InputField";
-import { EvilIcons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+  StyleSheet,
+} from "react-native";
 import { useRouter } from "expo-router";
-import axios from "axios";
-import Constants from "expo-constants";
+import { color } from "@/constants/Colors";
 
-export default function ForgotScreen() {
-    const [email,setEmail] = useState('');
-    const router = useRouter();
-    //const localhost = Constants.expoConfig?.extra?.localhost;
+const ForgotScreen = () => {
+  const [email, setEmail] = useState("");
 
-    // const HandleForgotPassword = async()=>{
-    //     if(email){
-    //         try{
-    //             const response = await axios.post(`http://${localhost}:3002/api/auth/forgot-password`,{email});
-    //             if(response.status === 200){
-    //                 router.push({pathname:"/(auth)/codeverify",params:{email}})
-    //             }else if (response.status === 404){
-    //                 Alert.alert("Email not found");
-    //             }
-    //         }catch(e){
-    //             console.log("Error occured",e);
-    //             Alert.alert("Error sending verification code")
-    //         }
-    //     }
-        
-    // }
+  const router = useRouter();
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.closebtn} onPress={()=>router.back()}>
-          <EvilIcons name="close" size={20} color="#999" />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.subContainer}>
-        <Text style={styles.headertxt}>Forgot password?</Text>
-        <View style={styles.textinp}>
-          <InputField labelTxt="Email :" type="email" onChangeText={(txt)=>setEmail(txt)} />
+      <Text style={styles.title}>Forgot Password?</Text>
+      <Text style={styles.subTitle}>
+        Please enter email associated with your account.
+      </Text>
+      <View style={styles.inputContainer}>
+        <View>
+          <Text style={styles.labelTxt}>Email</Text>
+          <TextInput
+            placeholder="example@gmail.com"
+            value={email}
+            onChangeText={setEmail}
+            style={styles.input}
+          />
         </View>
+      </View>
 
-          <Pressable 
-          style={styles.resetbtn} 
-          //onPress={HandleForgotPassword}
-          >
-            <Text style={{color:'#fff'}}>Reset Password</Text>
-          </Pressable>
+      <TouchableOpacity
+        style={styles.loginButton}
+        onPress={() => router.push("/(auth)/codeverify")}
+      >
+        <Text style={styles.loginButtonText}>Send Code</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.resendButton}>
+        <Text style={styles.resendBtnTxt}>Resend Code</Text>
+      </TouchableOpacity>
 
+      <View style={styles.signinContainer}>
+        <Text style={styles.signinText}>Rembered password? </Text>
+        <TouchableOpacity onPress={() => router.navigate("/(auth)/signin")}>
+          <Text style={styles.signinLink}>Log in</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
-}
+};
+
+export default ForgotScreen;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#F2F4F7",
-        paddingHorizontal:20
-      },
-      header:{
-        marginTop:20,
-        marginLeft:'auto',
-      },
-      closebtn:{
-        padding:20,
-        backgroundColor:'#e8e8e8',
-        borderRadius:30,
-      },
-      subContainer:{
-        justifyContent:'center',
-        flex:.7
-      },
-      textinp:{
-        margin:20
-      },
-      resetbtn:{
-        padding:20,
-        backgroundColor:"navy",
-        borderRadius:8,
-        alignItems:'center',
-        alignSelf:'center'
-      },
-      headertxt:{
-        fontSize:24,
-        fontWeight:'600',
-        color:'#000',
-      },
+  container: {
+    flex: 1,
+    backgroundColor: "#F8F9FA",
+    padding: 24,
+  },
+  title: {
+    marginVertical:24,
+    fontSize: 28,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  subTitle: {
+    fontSize: 15,
+    fontWeight: "400",
+    textAlign: "center",
+    marginBottom: 24,
+  },
+  labelTxt: {
+    fontSize: 16,
+    fontWeight: "500",
+    paddingVertical: 10,
+  },
+  inputContainer: {
+    marginBottom: 16,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 8,
+  },
+  loginButton: {
+    backgroundColor: color.green,
+    borderRadius: 8,
+    padding: 16,
+    alignItems: "center",
+  },
+  resendButton: {
+    borderRadius: 8,
+    padding: 16,
+    alignItems: "center",
+    borderColor: "#D1D5DB",
+    borderWidth: 1,
+    marginTop: 10,
+  },
+  loginButtonText: {
+    color: "#FFF",
+    fontWeight: "600",
+  },
+  resendBtnTxt: {
+    color: "#000",
+    fontWeight: "600",
+  },
+
+  signinContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  signinText: {
+    color: "#6B7280",
+  },
+  signinLink: {
+    color: "#2563EB",
+  },
 });

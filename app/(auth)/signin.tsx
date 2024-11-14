@@ -1,517 +1,294 @@
+import React, { useEffect, useState } from "react";
 import {
-  StyleSheet,
-  Text,
   View,
-  Image,
+  Text,
+  TextInput,
   TouchableOpacity,
-  Pressable,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Alert,
+  Image,
+  StyleSheet,
+  ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { StatusBar } from "expo-status-bar";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { HelloWave } from "@/components/HelloWave";
-import { Svg, Path } from "react-native-svg";
-import InputField from "@/components/InputField";
-import { Fontisto, Ionicons, AntDesign } from "@expo/vector-icons";
-import SocialButtons from "@/components/Auth/SocialLogo";
-import { Link, useRouter } from "expo-router";
-import Animated, {
-  Easing,
-  FadeInLeft,
-  FadeInRight,
-  FadeInUp,
-  FadeOutLeft,
-  FadeOutRight,
-  FadeOutUp,
-} from "react-native-reanimated";
-import axios, { AxiosError } from "axios";
+import { useRouter } from "expo-router";
+import { color } from "@/constants/Colors";
+import { loginSchema } from "@/validation/auth/ValidationSchemas";
+import { Formik } from "formik";
+import { useLogin } from "@/hooks/authhooks/authhooks";
+import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Constants from 'expo-constants';
-import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-
-
-export default function SigninScreen() {
-  const [isChecked, setIsChecked] = useState<boolean>(false);
-  const [keyboardStatus, setKeyboardStatus] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [emailErr, setEmailErr] = useState<string>("");
-  const [passwordErr, setPasswordErr] = useState<string>("");
-  const [loadingBtn, setLoadingBtn] = useState<boolean>(false);
-  const [restaurantId, setrestaurantId] = useState();
-
+const LoginScreen = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const signInMutation = useLogin();
 
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => setKeyboardStatus(true)
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => setKeyboardStatus(false)
-    );
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
+    if (signInMutation.isSuccess) {
+      Toast.show({
+        type: "success",
+        text1: "Sign-in Successful!",
+        text2: "Welcome! Login successfully.",
+      });
 
-  const imageSize = keyboardStatus
-    ? { width: 90, height: 90 }
-    : { width: 150, height: 150 };
-
-  const HandleCheckbox = () => {
-    setIsChecked(!isChecked);
-  };
-
-  const HandleEmailChange = (input: string) => {
-    setEmail(input);
-  };
-
-  const HandlePasswordChange = (input: string) => {
-    setPassword(input);
-  };
-
-  // validation email and password
-  const emailValidation = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (email === "") {
-      setEmailErr("Email is required");
-      return false;
-    } else if (!emailRegex.test(email)) {
-      setEmailErr("Invalid Email");
-      return false;
-    } else {
-      setEmailErr("");
-      return true;
-    }
-  };
-
-  const passwordValidation = (password: string) => {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-    if (password === "") {
-      setPasswordErr("Password is required");
-      return false;
-      // } else if (!passwordRegex.test(password)) {
-      //   setPasswordErr(
-      //     "Password should contain at least one uppercase letter, one lowercase letter, and one number"
-      //   );
-      //   return false;
-    } else if (password.length < 8) {
-      setPasswordErr("Password should contain at least 8 characters");
-      return false;
-    } else {
-      setPasswordErr("");
-      return true;
-    }
-  };
-
-  useEffect(() => {
-    const FetchData = async () => {
-      try {
-        const userRawObj = await AsyncStorage.getItem("User");
-        if (userRawObj) {
-          const userObj = JSON.parse(userRawObj);
-          setrestaurantId(userObj.restaurantId);
+      const handleLogin = async () => {
+        if (signInMutation.data) {
+          await AsyncStorage.setItem("userObj", JSON.stringify(signInMutation.data));
+          router.replace("/(tabs)");
         }
-  
-        const token = await AsyncStorage.getItem("AuthToken");
-        if (token && restaurantId) {
-          router.replace("/(tabs)/");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-  
-    FetchData();
-  }, []);
-  
+      };
 
-  useEffect(() => {
-    
-  }, []);
-
-  
-
-  const handleLogin = async () => {
-    const localhost = Constants.expoConfig?.extra?.localhost;
-    const isEmailValid = emailValidation(email);
-    const isPasswordValid = passwordValidation(password);
-    setLoadingBtn(true);
-  
-    if (!isEmailValid || !isPasswordValid) {
-      setLoadingBtn(false);
-      console.log("Invalid email or password");
-      return;
+      setTimeout(() => {
+        handleLogin();
+      }, 2000);
+      
+    } else if (signInMutation.isError) {
+      Toast.show({
+        type: "error",
+        text1: signInMutation.error.message,
+      });
     }
-  
-    const user = {
-      email: email,
-      password: password,
-    };
-  
-    try {
-      const response = await axios.post(`http://${localhost}:3002/api/auth/SignIn`, user);
-  
-      const token = response.data.token;
-      const userObj = response.data.user;
-  
-      console.log("userObj",userObj);
-      console.log("token", token);
-  
-      await AsyncStorage.setItem("AuthToken", token);
-      await AsyncStorage.setItem("User", JSON.stringify(userObj));
-  
-      setLoadingBtn(false);
-      if (!userObj.restaurantId) {
-        // Redirect to a screen where they can enter restaurant details
-        router.replace("/(auth)/restaurant"); 
-      } else {
-        // User has a restaurantId, proceed to the main app
-        setTimeout(() => {
-          router.replace("/(tabs)/");
-        }, 2000);
-      }
-    } catch (error) {
-      setLoadingBtn(false);
-  
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          console.log("Status Code:", error.response.status);
-          console.log("Data:", error.response.data);
-  
-          if (error.response.status === 401) {
-            setEmailErr("Incorrect Email/Password")
-            setPasswordErr("Incorrect Email/Password")
-          } else if (error.response.status === 500) {
-            setEmailErr("Internal Server Error")
-            setPasswordErr("Internal Server Error")
-          }
-          // Handle other specific status codes as needed
-        } else if (error.request) {
-          console.log("No response received:", error.request);
-        } else {
-          console.log("Error:", error.message);
-        }
-      } else {
-        console.log("An unexpected error occurred:", error);
-      }
-    }
-  };
-
-  const navigation = useNavigation();
-  useLayoutEffect(()=>{
-    navigation.setOptions({
-      headerShown:false
-    })
-  },[])
+  }, [signInMutation.isSuccess, signInMutation.isError]);
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={styles.container}>
-        <StatusBar style="auto" />
-        <View
-          style={{
-            paddingHorizontal: 20,
-            marginTop: 5,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flex: 0.3,
-          }}
-        >
-          <Animated.View
-            entering={FadeInLeft.duration(1000).delay(200).easing(Easing.ease)}
-            exiting={FadeOutLeft.duration(1000).delay(200).easing(Easing.ease)}
-            style={{ flexDirection: "column", alignItems: "center", flex: 0.4 }}
-          >
-            <Image
-              source={require("../../assets/images/Hi.png")}
-              tintColor={"#fff"}
-              style={{ width: 60, height: 60 }}
-            />
-            <Text
-              style={{
-                color: "#fff",
-                fontWeight: "semibold",
-                fontSize: keyboardStatus ? 20 : 32,
-                paddingTop: 10,
-                alignItems: "center",
-                textAlign: "center",
-              }}
-            >
-              Welcome Back <HelloWave />
-            </Text>
-          </Animated.View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.navigate("/(auth)/")} style={styles.backButton}>
+          <Text style={styles.backText}>←</Text>
+        </TouchableOpacity>
 
-          <Animated.View
-            entering={FadeInRight.duration(1000).delay(200).easing(Easing.ease)}
-            exiting={FadeOutRight.duration(1000).delay(200).easing(Easing.ease)}
-            style={{ flex: 0.6, position: "relative" }}
-          >
-            <View
-              style={{
-                position: "relative",
-                transform: [
-                  { translateX: keyboardStatus ? 50 : -50 },
-                  { translateY: 0 },
-                ],
-                width: keyboardStatus ? 370 : 470,
-                height: keyboardStatus ? 200 : 300,
-              }}
-            >
-              <Svg viewBox="0 0 337.5 337.5" xmlns="http://www.w3.org/2000/svg">
-                <Path
-                  d="M168.75,289.9495423096761C204.14349955795512,287.9539876453925,236.28868405569028,267.69985381263393,255.3482842878406,237.8098272424261C272.27784581554357,211.26021246973895,265.26188572534073,179.00441130488718,259.19765732905523,148.10591244076673C252.76332159274307,115.32164007371881,248.3212003180965,79.70358619820273,220.64493185436706,60.98906363074351C188.3567104222263,39.155966822667025,147.35444783126405,35.255526989546674,110.33206941324117,47.44391719311772C65.699444150159,62.13772876767024,15.566079922878863,85.60020136623935,6.090435048670018,131.62401575271815C-3.2842090154050743,177.15726273189242,35.661992389783364,215.89254302758624,68.97498676296694,248.31791793192343C96.14429337796984,274.7633026671825,130.8953532792371,292.0838612601018,168.75,289.9495423096761"
-                  fill="#06069a"
+        <Text style={styles.title}>Log In</Text>
+      </View>
+      <Formik
+        initialValues={{ email: "", password: "" }}
+        validationSchema={loginSchema}
+        onSubmit={(values) => {
+          signInMutation.mutate(values);
+          console.log(values);
+        }}
+      >
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          touched,
+        }) => (
+          <>
+            <View style={styles.inputContainer}>
+              <View>
+                <Text style={styles.labelTxt}>Email</Text>
+                <TextInput
+                  placeholder="example@gmail.com"
+                  value={values.email}
+                  onChangeText={handleChange("email")}
+                  style={styles.input}
                 />
-              </Svg>
-            </View>
-            <View
-              style={{
-                transform: [
-                  { translateX: keyboardStatus ? 170 : 100 },
-                  { translateY: keyboardStatus ? 40 : 70 },
-                ],
-                position: "absolute",
-              }}
-            >
-              <Image
-                source={require("../../assets/images/share.png")}
-                style={[imageSize]}
-              />
-            </View>
-          </Animated.View>
-        </View>
-
-        <View style={styles.content}>
-          <View style={styles.content}>
-            <Animated.Text
-              entering={FadeInUp.duration(1000).delay(200).easing(Easing.ease)}
-              style={{
-                color: "#000",
-                textAlign: "center",
-                fontWeight: "bold",
-                fontSize: 22,
-              }}
-            >
-              Log In
-            </Animated.Text>
-
-            <View>
-              <Animated.View
-                entering={FadeInUp.duration(1050)
-                  .delay(250)
-                  .easing(Easing.ease)}
-                exiting={FadeOutUp}
-              >
-                <InputField
-                  labelTxt={"Email"}
-                  type="email"
-                  onChangeText={(value) => HandleEmailChange(value)}
-                  error={emailErr ? true : false}
-                />
-                {emailErr ? (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      paddingHorizontal: 20,
-                      alignItems: "center",
-                      gap: 10,
-                    }}
-                  >
-                    <Ionicons name="warning" size={24} color="red" />
-                    <Text style={{ color: "red" }}>{emailErr} </Text>
-                  </View>
-                ) : null}
-                <InputField
-                  labelTxt={"Password"}
-                  type="password"
-                  onChangeText={(value) => HandlePasswordChange(value)}
-                  error={passwordErr ? true : false}
-                />
-                {passwordErr ? (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      paddingHorizontal: 20,
-                      gap: 10,
-                    }}
-                  >
-                    <Ionicons name="warning" size={24} color="red" />
-                    <Text style={{ color: "red" }}>{passwordErr}</Text>
-                  </View>
-                ) : null}
-              </Animated.View>
-
-              <Animated.View
-                entering={FadeInUp.duration(1100)
-                  .delay(280)
-                  .easing(Easing.ease)}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  paddingVertical: 10,
-                  paddingHorizontal: 20,
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    gap: 10,
-                    alignItems: "center",
-                  }}
-                >
-                  <Fontisto
-                    onPress={HandleCheckbox}
-                    name={isChecked ? "checkbox-active" : "checkbox-passive"}
-                    size={20}
-                    color="black"
-                  />
-                  <Text>Remember Me</Text>
-                </View>
-                <Pressable onPress={()=>router.push('/(auth)/forgotpassword')}>
-                  <Text>Forgot Password ?</Text>
-                </Pressable>
-                
-              </Animated.View>
-
-              <Animated.View
-                entering={FadeInUp.duration(1100)
-                  .delay(300)
-                  .easing(Easing.ease)}
-                style={styles.btnContainer}
-              >
-                <TouchableOpacity
-                  onPress={handleLogin}
-                  style={styles.button}
-                  activeOpacity={1}
-                >
-                  {loadingBtn ? (
-                    <Text style={styles.buttonText}>Loading ...</Text>
-                  ) : (
-                    <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
-                    >
-                      <Text style={styles.buttonText}>Continue</Text>
-                      <AntDesign
-                        name="arrowright"
-                        size={20}
-                        color="#fff"
-                        style={styles.icon}
-                      />
-                    </View>
-                  )}
-                </TouchableOpacity>
-              </Animated.View>
-            </View>
-
-            {/* <Animated.View
-              entering={FadeInUp.duration(1150).delay(350).easing(Easing.ease)}
-              style={{ marginTop: 20 }}
-            >
-              <View style={{ alignItems: "center" }}>
-                <Text
-                  style={{ fontWeight: "500", fontSize: 15, color: "gray" }}
-                >
-                  Or Log In With
-                </Text>
+                {errors.email && touched.email && (
+                  <Text style={styles.errorText}>{errors.email}</Text>
+                )}
               </View>
               <View>
-                <SocialButtons />
+                <Text style={styles.labelTxt}>Password</Text>
+                <View style={styles.passwordContainer}>
+                  <TextInput
+                    placeholder="Must be 8 characters"
+                    value={values.password}
+                    onChangeText={handleChange("password")}
+                    secureTextEntry={!showPassword}
+                    style={styles.passwordInput}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                  >
+                    <Text style={styles.eyeIcon}>
+                      {showPassword ? "👁" : "👁‍🗨"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                {errors.password && touched.password && (
+                  <Text style={styles.errorText}>{errors.password}</Text>
+                )}
               </View>
-            </Animated.View> */}
-
-            <View
-              style={{
-                paddingHorizontal: 30,
-                alignItems: "center",
-                marginTop: 40,
-              }}
-            >
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#d4d4d4",
-                  width: "80%",
-                  alignItems: "center",
-                }}
-              />
             </View>
+            <TouchableOpacity
+              onPress={() => router.push("/(auth)/forgotpassword")}
+            >
+              <Text style={styles.forgotPassword}>Forgot password?</Text>
+            </TouchableOpacity>
 
-            <Pressable style={{ alignItems: "center", marginTop: 20 }}>
-              <Link replace href="/(auth)/">
-                <Animated.Text
-                  entering={FadeInUp.duration(1200)
-                    .delay(400)
-                    .easing(Easing.ease)}
-                  style={{ fontWeight: "500", fontSize: 15, color: "gray" }}
-                >
-                  Don't Have An Account ?{" "}
-                  <Text style={{ textDecorationLine: "underline" }}>
-                    Register
-                  </Text>
-                </Animated.Text>
-              </Link>
-            </Pressable>
-          </View>
-        </View>
-      </SafeAreaView>
-    </TouchableWithoutFeedback>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={() => handleSubmit()}
+              disabled={signInMutation.isPending}
+            >
+              {signInMutation.isPending ? (
+                <ActivityIndicator color="#FFF" />
+              ) : (
+                <Text style={styles.loginButtonText}>Log in</Text>
+              )}
+            </TouchableOpacity>
+          </>
+        )}
+      </Formik>
+      <View style={styles.separatorContainer}>
+        <View style={styles.separator} />
+        <Text style={styles.separatorText}>Or Login with</Text>
+        <View style={styles.separator} />
+      </View>
+
+      <View style={styles.socialButtonsContainer}>
+        <TouchableOpacity style={styles.socialButton}>
+          <Image
+            source={{
+              uri: "https://img.icons8.com/?size=100&id=118497&format=png&color=000000",
+            }}
+            style={styles.socialIcon}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.socialButton}>
+          <Image
+            source={{
+              uri: "https://img.icons8.com/?size=100&id=17949&format=png&color=000000",
+            }}
+            style={styles.socialIcon}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.socialButton}>
+          <Image
+            source={{ uri: "https://img.icons8.com/ios-filled/50/mac-os.png" }}
+            style={styles.socialIcon}
+          />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.signUpContainer}>
+        <Text style={styles.signUpText}>Don't have an account? </Text>
+        <TouchableOpacity onPress={() => router.navigate("/(auth)/signup")}>
+          <Text style={styles.signUpLink}>Sign up</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
-}
+};
+
+export default LoginScreen;
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
-    backgroundColor: "navy",
-    color: "#000",
+    backgroundColor:color.graywhite,
+    padding: 24,
   },
-  content: {
-    backgroundColor: "#f8f8f8",
-    borderTopRightRadius: 50,
-    borderTopLeftRadius: 50,
-    marginTop: 20,
-    flex: 0.7,
-    shadowColor: "#fff",
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-    shadowOffset: {
-      width: 3,
-      height: 3,
-    },
-    elevation: 5,
+  header: {
+    flexDirection: "row",    
+    alignItems: "center",      
+    justifyContent: "space-between", 
+    marginBottom: 20,          
+    paddingHorizontal: 10,     
   },
-  btnContainer: {
-    paddingHorizontal: 20,
+  backButton: {
+    marginRight: 10,           
+  },
+  backText: {
+    fontSize: 24,
+    color: "#000",             
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    flex: 1,                   
+    textAlign: "center",   
+    color: "#000",            
+  },
+  labelTxt: {
+    fontSize: 16,
+    fontWeight: "500",
+    paddingVertical: 10,
+  },
+  inputContainer: {
+    marginBottom: 16,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 8,
+  },
+  passwordContainer: {
+    flexDirection: "row",
     alignItems: "center",
-    marginTop: 5,
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 8,
   },
-  button: {
-    padding: 15,
-    borderRadius: 10,
-    backgroundColor: "navy",
-    width: "50%",
+  passwordInput: {
+    flex: 1,
+    padding: 10,
+  },
+  eyeIcon: {
+    paddingRight: 16,
+    fontSize: 20,
+  },
+  forgotPassword: {
+    textAlign: "right",
+    color: "#2563EB",
+    marginBottom: 24,
+  },
+  loginButton: {
+    backgroundColor: color.green,
+    borderRadius: 8,
+    padding: 16,
+    alignItems: "center",
+  },
+  loginButtonText: {
+    color: "#FFF",
+    fontWeight: "600",
+  },
+  separatorContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 24,
+  },
+  separator: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "#E5E7EB",
+  },
+  separatorText: {
+    marginHorizontal: 12,
+    color: "#6B7280",
+  },
+  socialButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 24,
+  },
+  socialButton: {
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 8,
+    padding: 12,
+  },
+  socialIcon: {
+    width: 24,
+    height: 24,
+  },
+  signUpContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
   },
-  buttonText: {
-    color: "#fff",
-    fontSize: 20,
-    fontWeight: "500",
-    textAlign: "center",
+  signUpText: {
+    color: "#6B7280",
   },
-  icon: {
-    marginLeft: 10,
+  signUpLink: {
+    color: "#2563EB",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 4,
   },
 });

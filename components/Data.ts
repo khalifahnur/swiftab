@@ -6,7 +6,9 @@ const restaurants = [
         id: 101,
         image: require("../assets/images/restaurants/res1.jpeg"),
         restaurantName: "The Gourmet Kitchen",
-        location: "New York, USA",
+        location: "South C",
+        lat:-1.3159,
+        long:36.8225,
         rate: 4.5,
         about: [
           {
@@ -19,37 +21,156 @@ const restaurants = [
         ],
         menu: [
           {
-            breakfast: [
-              {
-                id: 1,
-                image: "https://example.com/breakfast1.jpg",
-                name: "Pancakes",
-                description: "Fluffy pancakes served with syrup and butter.",
-                cost: 8,
-                rate: 4.7,
-              },
-            ],
-            lunch: [
-              {
-                id: 1,
-                image: "https://example.com/lunch1.jpg",
-                name: "Grilled Chicken Salad",
-                description:
-                  "Mixed greens with grilled chicken and vinaigrette.",
-                cost: 12,
-                rate: 4.8,
-              },
-            ],
-            dinner: [
-              {
-                id: 1,
-                image: "https://example.com/dinner1.jpg",
-                name: "Steak Frites",
-                description: "Juicy steak with crispy fries.",
-                cost: 25,
-                rate: 4.9,
-              },
-            ],
+              breakfast: [
+                {
+                  id: 1,
+                  image: require('@/assets/images/menu/breakfast/avocadotoast.png'),
+                  name: "Avocado Toast",
+                  description: "Toasted bread topped with smashed avocado, sea salt, and a sprinkle of chili flakes.",
+                  cost: 8,
+                  rate: 4.5
+                },
+                {
+                  id: 2,
+                  image: require('@/assets/images/menu/breakfast/pancakes.png'),
+                  name: "Pancakes with Maple Syrup",
+                  description: "Fluffy pancakes drizzled with rich maple syrup.",
+                  cost: 12,
+                  rate: 4.8
+                },
+                {
+                  id: 3,
+                  image: require('@/assets/images/menu/breakfast/benedict.png'),
+                  name: "Eggs Benedict",
+                  description: "Poached eggs with hollandaise sauce on an English muffin, served with ham or spinach.",
+                  cost: 14,
+                  rate: 4.7
+                },
+                {
+                  id: 4,
+                  image: require('@/assets/images/menu/breakfast/smoothiebowl.png'),
+                  name: "Smoothie Bowl",
+                  description: "Blended smoothie base topped with fresh fruits, granola, and nuts.",
+                  cost: 10,
+                  rate: 4.6
+                },
+                {
+                  id: 5,
+                  image: require('@/assets/images/menu/breakfast/oatmeal.png'),
+                  name: "Oatmeal with Berries",
+                  description: "Creamy oatmeal topped with fresh berries and a drizzle of honey.",
+                  cost: 7,
+                  rate: 4.4
+                },
+                {
+                  id: 6,
+                  image: require('@/assets/images/menu/breakfast/salmol.png'),
+                  name: "Salmon Bagel",
+                  description: "Bagel with smoked salmon and cream cheese.",
+                  cost: 10,
+                  rate: 4.6
+                }
+              ],
+              lunch: [
+                {
+                  id: 7,
+                  image: require('@/assets/images/menu/lunch/caesar.png'),
+                  name: "Chicken Caesar Salad",
+                  description: "Romaine lettuce with grilled chicken, Caesar dressing, and croutons.",
+                  cost: 13,
+                  rate: 4.5
+                },
+                {
+                  id: 8,
+                  image: require('@/assets/images/menu/lunch/sushi.png'),
+                  name: "Sushi Platter",
+                  description: "Assorted sushi rolls and sashimi served with soy sauce and wasabi.",
+                  cost: 20,
+                  rate: 4.8
+                },
+                {
+                  id: 9,
+                  image: require('@/assets/images/menu/lunch/veg.png'),
+                  name: "Vegetarian Wrap",
+                  description: "Whole wheat wrap filled with hummus, veggies, and avocado.",
+                  cost: 9,
+                  rate: 4.3
+                },
+                {
+                  id: 10,
+                  image: require('@/assets/images/menu/lunch/basel.png'),
+                  name: "Tomato Basil Soup",
+                  description: "Creamy tomato soup with a hint of basil, served with a side of bread.",
+                  cost: 8,
+                  rate: 4.2
+                },
+                {
+                  id: 11,
+                  image: require('@/assets/images/menu/lunch/steak.png'),
+                  name: "Steak Sandwich",
+                  description: "Grilled steak slices with caramelized onions, served in a hoagie roll.",
+                  cost: 15,
+                  rate: 4.6
+                },
+                {
+                  id: 12,
+                  image: require('@/assets/images/menu/lunch/fish.png'),
+                  name: "Fish & Chips",
+                  description: "Battered fish served with crispy fries.",
+                  cost: 15,
+                  rate: 4.7
+                }
+              ],
+              dinner: [
+                {
+                  id: 13,
+                  image: require('@/assets/images/menu/dinner/spaghetti.png'),
+                  name: "Spaghetti Carbonara",
+                  description: "Classic Italian pasta with creamy egg and pancetta sauce.",
+                  cost: 18,
+                  rate: 4.5
+                },
+                {
+                  id: 14,
+                  image: require('@/assets/images/menu/dinner/chicken.png'),
+                  name: "Grilled Chicken",
+                  description: "Juicy grilled chicken served with a side of vegetables.",
+                  cost: 22,
+                  rate: 4.6
+                },
+                {
+                  id: 15,
+                  image: require('@/assets/images/menu/dinner/veg.png'),
+                  name: "Vegetable Stir-Fry",
+                  description: "Mixed vegetables stir-fried in a savory sauce, served with rice.",
+                  cost: 16,
+                  rate: 4.3
+                },
+                {
+                  id: 16,
+                  image: require('@/assets/images/menu/dinner/beef.png'),
+                  name: "Beef Tacos",
+                  description: "Soft tortillas filled with seasoned beef, cheese, and salsa.",
+                  cost: 14,
+                  rate: 4.4
+                },
+                {
+                  id: 17,
+                  image: require('@/assets/images/menu/dinner/paela.png'),
+                  name: "Seafood Paella",
+                  description: "Traditional Spanish rice dish with shrimp, mussels, and calamari.",
+                  cost: 30,
+                  rate: 4.8
+                },
+                {
+                  id: 18,
+                  image: require('@/assets/images/menu/dinner/lobster.png'),
+                  name: "Grilled Lobster",
+                  description: "Lobster grilled to perfection with garlic butter.",
+                  cost: 40,
+                  rate: 4.9
+                }
+              ]                     
           },
         ],
         review: [
@@ -69,7 +190,9 @@ const restaurants = [
         id: 102,
         image: require("../assets/images/restaurants/res2.jpeg"),
         restaurantName: "Sushi Paradise",
-        location: "Tokyo, Japan",
+        location: "South B",
+        lat:-1.3065,
+        long:36.8367,
         rate: 4.9,
         about: [
           {
@@ -82,36 +205,156 @@ const restaurants = [
         ],
         menu: [
           {
-            breakfast: [
-              {
-                id: 2,
-                image: "https://example.com/breakfast2.jpg",
-                name: "Tamago Sushi",
-                description: "Sweet egg omelette over sushi rice.",
-                cost: 5,
-                rate: 4.9,
-              },
-            ],
-            lunch: [
-              {
-                id: 2,
-                image: "https://example.com/lunch2.jpg",
-                name: "Sashimi Platter",
-                description: "Fresh slices of tuna, salmon, and yellowtail.",
-                cost: 20,
-                rate: 5,
-              },
-            ],
-            dinner: [
-              {
-                id: 2,
-                image: "https://example.com/dinner2.jpg",
-                name: "Omakase",
-                description: "Chef's special selection of sushi.",
-                cost: 50,
-                rate: 5,
-              },
-            ],
+              breakfast: [
+                {
+                  id: 1,
+                  image: require('@/assets/images/menu/breakfast/avocadotoast.png'),
+                  name: "Avocado Toast",
+                  description: "Toasted bread topped with smashed avocado, sea salt, and a sprinkle of chili flakes.",
+                  cost: 8,
+                  rate: 4.5
+                },
+                {
+                  id: 2,
+                  image: require('@/assets/images/menu/breakfast/pancakes.png'),
+                  name: "Pancakes with Maple Syrup",
+                  description: "Fluffy pancakes drizzled with rich maple syrup.",
+                  cost: 12,
+                  rate: 4.8
+                },
+                {
+                  id: 3,
+                  image: require('@/assets/images/menu/breakfast/benedict.png'),
+                  name: "Eggs Benedict",
+                  description: "Poached eggs with hollandaise sauce on an English muffin, served with ham or spinach.",
+                  cost: 14,
+                  rate: 4.7
+                },
+                {
+                  id: 4,
+                  image: require('@/assets/images/menu/breakfast/smoothiebowl.png'),
+                  name: "Smoothie Bowl",
+                  description: "Blended smoothie base topped with fresh fruits, granola, and nuts.",
+                  cost: 10,
+                  rate: 4.6
+                },
+                {
+                  id: 5,
+                  image: require('@/assets/images/menu/breakfast/oatmeal.png'),
+                  name: "Oatmeal with Berries",
+                  description: "Creamy oatmeal topped with fresh berries and a drizzle of honey.",
+                  cost: 7,
+                  rate: 4.4
+                },
+                {
+                  id: 6,
+                  image: require('@/assets/images/menu/breakfast/salmol.png'),
+                  name: "Salmon Bagel",
+                  description: "Bagel with smoked salmon and cream cheese.",
+                  cost: 10,
+                  rate: 4.6
+                }
+              ],
+              lunch: [
+                {
+                  id: 7,
+                  image: require('@/assets/images/menu/lunch/caesar.png'),
+                  name: "Chicken Caesar Salad",
+                  description: "Romaine lettuce with grilled chicken, Caesar dressing, and croutons.",
+                  cost: 13,
+                  rate: 4.5
+                },
+                {
+                  id: 8,
+                  image: require('@/assets/images/menu/lunch/sushi.png'),
+                  name: "Sushi Platter",
+                  description: "Assorted sushi rolls and sashimi served with soy sauce and wasabi.",
+                  cost: 20,
+                  rate: 4.8
+                },
+                {
+                  id: 9,
+                  image: require('@/assets/images/menu/lunch/veg.png'),
+                  name: "Vegetarian Wrap",
+                  description: "Whole wheat wrap filled with hummus, veggies, and avocado.",
+                  cost: 9,
+                  rate: 4.3
+                },
+                {
+                  id: 10,
+                  image: require('@/assets/images/menu/lunch/basel.png'),
+                  name: "Tomato Basil Soup",
+                  description: "Creamy tomato soup with a hint of basil, served with a side of bread.",
+                  cost: 8,
+                  rate: 4.2
+                },
+                {
+                  id: 11,
+                  image: require('@/assets/images/menu/lunch/steak.png'),
+                  name: "Steak Sandwich",
+                  description: "Grilled steak slices with caramelized onions, served in a hoagie roll.",
+                  cost: 15,
+                  rate: 4.6
+                },
+                {
+                  id: 12,
+                  image: require('@/assets/images/menu/lunch/fish.png'),
+                  name: "Fish & Chips",
+                  description: "Battered fish served with crispy fries.",
+                  cost: 15,
+                  rate: 4.7
+                }
+              ],
+              dinner: [
+                {
+                  id: 13,
+                  image: require('@/assets/images/menu/dinner/spaghetti.png'),
+                  name: "Spaghetti Carbonara",
+                  description: "Classic Italian pasta with creamy egg and pancetta sauce.",
+                  cost: 18,
+                  rate: 4.5
+                },
+                {
+                  id: 14,
+                  image: require('@/assets/images/menu/dinner/chicken.png'),
+                  name: "Grilled Chicken",
+                  description: "Juicy grilled chicken served with a side of vegetables.",
+                  cost: 22,
+                  rate: 4.6
+                },
+                {
+                  id: 15,
+                  image: require('@/assets/images/menu/dinner/veg.png'),
+                  name: "Vegetable Stir-Fry",
+                  description: "Mixed vegetables stir-fried in a savory sauce, served with rice.",
+                  cost: 16,
+                  rate: 4.3
+                },
+                {
+                  id: 16,
+                  image: require('@/assets/images/menu/dinner/beef.png'),
+                  name: "Beef Tacos",
+                  description: "Soft tortillas filled with seasoned beef, cheese, and salsa.",
+                  cost: 14,
+                  rate: 4.4
+                },
+                {
+                  id: 17,
+                  image: require('@/assets/images/menu/dinner/paela.png'),
+                  name: "Seafood Paella",
+                  description: "Traditional Spanish rice dish with shrimp, mussels, and calamari.",
+                  cost: 30,
+                  rate: 4.8
+                },
+                {
+                  id: 18,
+                  image: require('@/assets/images/menu/dinner/lobster.png'),
+                  name: "Grilled Lobster",
+                  description: "Lobster grilled to perfection with garlic butter.",
+                  cost: 40,
+                  rate: 4.9
+                }
+              ]                     
           },
         ],
         review: [
@@ -131,7 +374,9 @@ const restaurants = [
         id: 103,
         image: require("../assets/images/restaurants/res3.jpeg"),
         restaurantName: "Pasta Haven",
-        location: "Rome, Italy",
+        location: "Nairobi CBD",
+        lat:-1.2921,
+        long:36.8219,
         rate: 4.7,
         about: [
           {
@@ -144,37 +389,156 @@ const restaurants = [
         ],
         menu: [
           {
-            breakfast: [
-              {
-                id: 3,
-                image: "https://example.com/breakfast3.jpg",
-                name: "Cappuccino & Croissant",
-                description: "Classic Italian breakfast.",
-                cost: 6,
-                rate: 4.5,
-              },
-            ],
-            lunch: [
-              {
-                id: 3,
-                image: "https://example.com/lunch3.jpg",
-                name: "Spaghetti Carbonara",
-                description:
-                  "Traditional Roman pasta dish with eggs and pancetta.",
-                cost: 12,
-                rate: 4.8,
-              },
-            ],
-            dinner: [
-              {
-                id: 3,
-                image: "https://example.com/dinner3.jpg",
-                name: "Lasagna",
-                description: "Layered pasta with meat and cheese.",
-                cost: 15,
-                rate: 4.9,
-              },
-            ],
+              breakfast: [
+                {
+                  id: 1,
+                  image: require('@/assets/images/menu/breakfast/avocadotoast.png'),
+                  name: "Avocado Toast",
+                  description: "Toasted bread topped with smashed avocado, sea salt, and a sprinkle of chili flakes.",
+                  cost: 8,
+                  rate: 4.5
+                },
+                {
+                  id: 2,
+                  image: require('@/assets/images/menu/breakfast/pancakes.png'),
+                  name: "Pancakes with Maple Syrup",
+                  description: "Fluffy pancakes drizzled with rich maple syrup.",
+                  cost: 12,
+                  rate: 4.8
+                },
+                {
+                  id: 3,
+                  image: require('@/assets/images/menu/breakfast/benedict.png'),
+                  name: "Eggs Benedict",
+                  description: "Poached eggs with hollandaise sauce on an English muffin, served with ham or spinach.",
+                  cost: 14,
+                  rate: 4.7
+                },
+                {
+                  id: 4,
+                  image: require('@/assets/images/menu/breakfast/smoothiebowl.png'),
+                  name: "Smoothie Bowl",
+                  description: "Blended smoothie base topped with fresh fruits, granola, and nuts.",
+                  cost: 10,
+                  rate: 4.6
+                },
+                {
+                  id: 5,
+                  image: require('@/assets/images/menu/breakfast/oatmeal.png'),
+                  name: "Oatmeal with Berries",
+                  description: "Creamy oatmeal topped with fresh berries and a drizzle of honey.",
+                  cost: 7,
+                  rate: 4.4
+                },
+                {
+                  id: 6,
+                  image: require('@/assets/images/menu/breakfast/salmol.png'),
+                  name: "Salmon Bagel",
+                  description: "Bagel with smoked salmon and cream cheese.",
+                  cost: 10,
+                  rate: 4.6
+                }
+              ],
+              lunch: [
+                {
+                  id: 7,
+                  image: require('@/assets/images/menu/lunch/caesar.png'),
+                  name: "Chicken Caesar Salad",
+                  description: "Romaine lettuce with grilled chicken, Caesar dressing, and croutons.",
+                  cost: 13,
+                  rate: 4.5
+                },
+                {
+                  id: 8,
+                  image: require('@/assets/images/menu/lunch/sushi.png'),
+                  name: "Sushi Platter",
+                  description: "Assorted sushi rolls and sashimi served with soy sauce and wasabi.",
+                  cost: 20,
+                  rate: 4.8
+                },
+                {
+                  id: 9,
+                  image: require('@/assets/images/menu/lunch/veg.png'),
+                  name: "Vegetarian Wrap",
+                  description: "Whole wheat wrap filled with hummus, veggies, and avocado.",
+                  cost: 9,
+                  rate: 4.3
+                },
+                {
+                  id: 10,
+                  image: require('@/assets/images/menu/lunch/basel.png'),
+                  name: "Tomato Basil Soup",
+                  description: "Creamy tomato soup with a hint of basil, served with a side of bread.",
+                  cost: 8,
+                  rate: 4.2
+                },
+                {
+                  id: 11,
+                  image: require('@/assets/images/menu/lunch/steak.png'),
+                  name: "Steak Sandwich",
+                  description: "Grilled steak slices with caramelized onions, served in a hoagie roll.",
+                  cost: 15,
+                  rate: 4.6
+                },
+                {
+                  id: 12,
+                  image: require('@/assets/images/menu/lunch/fish.png'),
+                  name: "Fish & Chips",
+                  description: "Battered fish served with crispy fries.",
+                  cost: 15,
+                  rate: 4.7
+                }
+              ],
+              dinner: [
+                {
+                  id: 13,
+                  image: require('@/assets/images/menu/dinner/spaghetti.png'),
+                  name: "Spaghetti Carbonara",
+                  description: "Classic Italian pasta with creamy egg and pancetta sauce.",
+                  cost: 18,
+                  rate: 4.5
+                },
+                {
+                  id: 14,
+                  image: require('@/assets/images/menu/dinner/chicken.png'),
+                  name: "Grilled Chicken",
+                  description: "Juicy grilled chicken served with a side of vegetables.",
+                  cost: 22,
+                  rate: 4.6
+                },
+                {
+                  id: 15,
+                  image: require('@/assets/images/menu/dinner/veg.png'),
+                  name: "Vegetable Stir-Fry",
+                  description: "Mixed vegetables stir-fried in a savory sauce, served with rice.",
+                  cost: 16,
+                  rate: 4.3
+                },
+                {
+                  id: 16,
+                  image: require('@/assets/images/menu/dinner/beef.png'),
+                  name: "Beef Tacos",
+                  description: "Soft tortillas filled with seasoned beef, cheese, and salsa.",
+                  cost: 14,
+                  rate: 4.4
+                },
+                {
+                  id: 17,
+                  image: require('@/assets/images/menu/dinner/paela.png'),
+                  name: "Seafood Paella",
+                  description: "Traditional Spanish rice dish with shrimp, mussels, and calamari.",
+                  cost: 30,
+                  rate: 4.8
+                },
+                {
+                  id: 18,
+                  image: require('@/assets/images/menu/dinner/lobster.png'),
+                  name: "Grilled Lobster",
+                  description: "Lobster grilled to perfection with garlic butter.",
+                  cost: 40,
+                  rate: 4.9
+                }
+              ]                     
           },
         ],
         review: [
@@ -194,7 +558,9 @@ const restaurants = [
         id: 104,
         image: require("../assets/images/restaurants/res4.jpeg"),
         restaurantName: "Burger Shack",
-        location: "Los Angeles, USA",
+        location: "South C",
+        lat:-1.3172,
+        long:36.8250,
         rate: 4.4,
         about: [
           {
@@ -207,36 +573,156 @@ const restaurants = [
         ],
         menu: [
           {
-            breakfast: [
-              {
-                id: 4,
-                image: "https://example.com/breakfast4.jpg",
-                name: "Breakfast Burger",
-                description: "Burger with egg, bacon, and cheese.",
-                cost: 8,
-                rate: 4.2,
-              },
-            ],
-            lunch: [
-              {
-                id: 4,
-                image: "https://example.com/lunch4.jpg",
-                name: "Cheeseburger",
-                description: "Classic cheeseburger with fries.",
-                cost: 10,
-                rate: 4.5,
-              },
-            ],
-            dinner: [
-              {
-                id: 4,
-                image: "https://example.com/dinner4.jpg",
-                name: "BBQ Burger",
-                description: "Burger with BBQ sauce and onion rings.",
-                cost: 12,
-                rate: 4.6,
-              },
-            ],
+              breakfast: [
+                {
+                  id: 1,
+                  image: require('@/assets/images/menu/breakfast/avocadotoast.png'),
+                  name: "Avocado Toast",
+                  description: "Toasted bread topped with smashed avocado, sea salt, and a sprinkle of chili flakes.",
+                  cost: 8,
+                  rate: 4.5
+                },
+                {
+                  id: 2,
+                  image: require('@/assets/images/menu/breakfast/pancakes.png'),
+                  name: "Pancakes with Maple Syrup",
+                  description: "Fluffy pancakes drizzled with rich maple syrup.",
+                  cost: 12,
+                  rate: 4.8
+                },
+                {
+                  id: 3,
+                  image: require('@/assets/images/menu/breakfast/benedict.png'),
+                  name: "Eggs Benedict",
+                  description: "Poached eggs with hollandaise sauce on an English muffin, served with ham or spinach.",
+                  cost: 14,
+                  rate: 4.7
+                },
+                {
+                  id: 4,
+                  image: require('@/assets/images/menu/breakfast/smoothiebowl.png'),
+                  name: "Smoothie Bowl",
+                  description: "Blended smoothie base topped with fresh fruits, granola, and nuts.",
+                  cost: 10,
+                  rate: 4.6
+                },
+                {
+                  id: 5,
+                  image: require('@/assets/images/menu/breakfast/oatmeal.png'),
+                  name: "Oatmeal with Berries",
+                  description: "Creamy oatmeal topped with fresh berries and a drizzle of honey.",
+                  cost: 7,
+                  rate: 4.4
+                },
+                {
+                  id: 6,
+                  image: require('@/assets/images/menu/breakfast/salmol.png'),
+                  name: "Salmon Bagel",
+                  description: "Bagel with smoked salmon and cream cheese.",
+                  cost: 10,
+                  rate: 4.6
+                }
+              ],
+              lunch: [
+                {
+                  id: 7,
+                  image: require('@/assets/images/menu/lunch/caesar.png'),
+                  name: "Chicken Caesar Salad",
+                  description: "Romaine lettuce with grilled chicken, Caesar dressing, and croutons.",
+                  cost: 13,
+                  rate: 4.5
+                },
+                {
+                  id: 8,
+                  image: require('@/assets/images/menu/lunch/sushi.png'),
+                  name: "Sushi Platter",
+                  description: "Assorted sushi rolls and sashimi served with soy sauce and wasabi.",
+                  cost: 20,
+                  rate: 4.8
+                },
+                {
+                  id: 9,
+                  image: require('@/assets/images/menu/lunch/veg.png'),
+                  name: "Vegetarian Wrap",
+                  description: "Whole wheat wrap filled with hummus, veggies, and avocado.",
+                  cost: 9,
+                  rate: 4.3
+                },
+                {
+                  id: 10,
+                  image: require('@/assets/images/menu/lunch/basel.png'),
+                  name: "Tomato Basil Soup",
+                  description: "Creamy tomato soup with a hint of basil, served with a side of bread.",
+                  cost: 8,
+                  rate: 4.2
+                },
+                {
+                  id: 11,
+                  image: require('@/assets/images/menu/lunch/steak.png'),
+                  name: "Steak Sandwich",
+                  description: "Grilled steak slices with caramelized onions, served in a hoagie roll.",
+                  cost: 15,
+                  rate: 4.6
+                },
+                {
+                  id: 12,
+                  image: require('@/assets/images/menu/lunch/fish.png'),
+                  name: "Fish & Chips",
+                  description: "Battered fish served with crispy fries.",
+                  cost: 15,
+                  rate: 4.7
+                }
+              ],
+              dinner: [
+                {
+                  id: 13,
+                  image: require('@/assets/images/menu/dinner/spaghetti.png'),
+                  name: "Spaghetti Carbonara",
+                  description: "Classic Italian pasta with creamy egg and pancetta sauce.",
+                  cost: 18,
+                  rate: 4.5
+                },
+                {
+                  id: 14,
+                  image: require('@/assets/images/menu/dinner/chicken.png'),
+                  name: "Grilled Chicken",
+                  description: "Juicy grilled chicken served with a side of vegetables.",
+                  cost: 22,
+                  rate: 4.6
+                },
+                {
+                  id: 15,
+                  image: require('@/assets/images/menu/dinner/veg.png'),
+                  name: "Vegetable Stir-Fry",
+                  description: "Mixed vegetables stir-fried in a savory sauce, served with rice.",
+                  cost: 16,
+                  rate: 4.3
+                },
+                {
+                  id: 16,
+                  image: require('@/assets/images/menu/dinner/beef.png'),
+                  name: "Beef Tacos",
+                  description: "Soft tortillas filled with seasoned beef, cheese, and salsa.",
+                  cost: 14,
+                  rate: 4.4
+                },
+                {
+                  id: 17,
+                  image: require('@/assets/images/menu/dinner/paela.png'),
+                  name: "Seafood Paella",
+                  description: "Traditional Spanish rice dish with shrimp, mussels, and calamari.",
+                  cost: 30,
+                  rate: 4.8
+                },
+                {
+                  id: 18,
+                  image: require('@/assets/images/menu/dinner/lobster.png'),
+                  name: "Grilled Lobster",
+                  description: "Lobster grilled to perfection with garlic butter.",
+                  cost: 40,
+                  rate: 4.9
+                }
+              ]                     
           },
         ],
         review: [
@@ -261,7 +747,9 @@ const restaurants = [
         id: 105,
         image: require("../assets/images/restaurants/res5.jpeg"),
         restaurantName: "Spice Symphony",
-        location: "Mumbai, India",
+        location: "Westlands",
+        lat:-1.2696,
+        long:36.8054,
         rate: 4.8,
         about: [
           {
@@ -274,36 +762,156 @@ const restaurants = [
         ],
         menu: [
           {
-            breakfast: [
-              {
-                id: 5,
-                image: "https://example.com/breakfast5.jpg",
-                name: "Masala Dosa",
-                description: "Crispy dosa filled with spiced potatoes.",
-                cost: 4,
-                rate: 4.7,
-              },
-            ],
-            lunch: [
-              {
-                id: 5,
-                image: "https://example.com/lunch5.jpg",
-                name: "Chicken Biryani",
-                description: "Fragrant rice cooked with chicken and spices.",
-                cost: 10,
-                rate: 4.9,
-              },
-            ],
-            dinner: [
-              {
-                id: 5,
-                image: "https://example.com/dinner5.jpg",
-                name: "Butter Chicken",
-                description: "Creamy tomato-based chicken curry.",
-                cost: 12,
-                rate: 5,
-              },
-            ],
+              breakfast: [
+                {
+                  id: 1,
+                  image: require('@/assets/images/menu/breakfast/avocadotoast.png'),
+                  name: "Avocado Toast",
+                  description: "Toasted bread topped with smashed avocado, sea salt, and a sprinkle of chili flakes.",
+                  cost: 8,
+                  rate: 4.5
+                },
+                {
+                  id: 2,
+                  image: require('@/assets/images/menu/breakfast/pancakes.png'),
+                  name: "Pancakes with Maple Syrup",
+                  description: "Fluffy pancakes drizzled with rich maple syrup.",
+                  cost: 12,
+                  rate: 4.8
+                },
+                {
+                  id: 3,
+                  image: require('@/assets/images/menu/breakfast/benedict.png'),
+                  name: "Eggs Benedict",
+                  description: "Poached eggs with hollandaise sauce on an English muffin, served with ham or spinach.",
+                  cost: 14,
+                  rate: 4.7
+                },
+                {
+                  id: 4,
+                  image: require('@/assets/images/menu/breakfast/smoothiebowl.png'),
+                  name: "Smoothie Bowl",
+                  description: "Blended smoothie base topped with fresh fruits, granola, and nuts.",
+                  cost: 10,
+                  rate: 4.6
+                },
+                {
+                  id: 5,
+                  image: require('@/assets/images/menu/breakfast/oatmeal.png'),
+                  name: "Oatmeal with Berries",
+                  description: "Creamy oatmeal topped with fresh berries and a drizzle of honey.",
+                  cost: 7,
+                  rate: 4.4
+                },
+                {
+                  id: 6,
+                  image: require('@/assets/images/menu/breakfast/salmol.png'),
+                  name: "Salmon Bagel",
+                  description: "Bagel with smoked salmon and cream cheese.",
+                  cost: 10,
+                  rate: 4.6
+                }
+              ],
+              lunch: [
+                {
+                  id: 7,
+                  image: require('@/assets/images/menu/lunch/caesar.png'),
+                  name: "Chicken Caesar Salad",
+                  description: "Romaine lettuce with grilled chicken, Caesar dressing, and croutons.",
+                  cost: 13,
+                  rate: 4.5
+                },
+                {
+                  id: 8,
+                  image: require('@/assets/images/menu/lunch/sushi.png'),
+                  name: "Sushi Platter",
+                  description: "Assorted sushi rolls and sashimi served with soy sauce and wasabi.",
+                  cost: 20,
+                  rate: 4.8
+                },
+                {
+                  id: 9,
+                  image: require('@/assets/images/menu/lunch/veg.png'),
+                  name: "Vegetarian Wrap",
+                  description: "Whole wheat wrap filled with hummus, veggies, and avocado.",
+                  cost: 9,
+                  rate: 4.3
+                },
+                {
+                  id: 10,
+                  image: require('@/assets/images/menu/lunch/basel.png'),
+                  name: "Tomato Basil Soup",
+                  description: "Creamy tomato soup with a hint of basil, served with a side of bread.",
+                  cost: 8,
+                  rate: 4.2
+                },
+                {
+                  id: 11,
+                  image: require('@/assets/images/menu/lunch/steak.png'),
+                  name: "Steak Sandwich",
+                  description: "Grilled steak slices with caramelized onions, served in a hoagie roll.",
+                  cost: 15,
+                  rate: 4.6
+                },
+                {
+                  id: 12,
+                  image: require('@/assets/images/menu/lunch/fish.png'),
+                  name: "Fish & Chips",
+                  description: "Battered fish served with crispy fries.",
+                  cost: 15,
+                  rate: 4.7
+                }
+              ],
+              dinner: [
+                {
+                  id: 13,
+                  image: require('@/assets/images/menu/dinner/spaghetti.png'),
+                  name: "Spaghetti Carbonara",
+                  description: "Classic Italian pasta with creamy egg and pancetta sauce.",
+                  cost: 18,
+                  rate: 4.5
+                },
+                {
+                  id: 14,
+                  image: require('@/assets/images/menu/dinner/chicken.png'),
+                  name: "Grilled Chicken",
+                  description: "Juicy grilled chicken served with a side of vegetables.",
+                  cost: 22,
+                  rate: 4.6
+                },
+                {
+                  id: 15,
+                  image: require('@/assets/images/menu/dinner/veg.png'),
+                  name: "Vegetable Stir-Fry",
+                  description: "Mixed vegetables stir-fried in a savory sauce, served with rice.",
+                  cost: 16,
+                  rate: 4.3
+                },
+                {
+                  id: 16,
+                  image: require('@/assets/images/menu/dinner/beef.png'),
+                  name: "Beef Tacos",
+                  description: "Soft tortillas filled with seasoned beef, cheese, and salsa.",
+                  cost: 14,
+                  rate: 4.4
+                },
+                {
+                  id: 17,
+                  image: require('@/assets/images/menu/dinner/paela.png'),
+                  name: "Seafood Paella",
+                  description: "Traditional Spanish rice dish with shrimp, mussels, and calamari.",
+                  cost: 30,
+                  rate: 4.8
+                },
+                {
+                  id: 18,
+                  image: require('@/assets/images/menu/dinner/lobster.png'),
+                  name: "Grilled Lobster",
+                  description: "Lobster grilled to perfection with garlic butter.",
+                  cost: 40,
+                  rate: 4.9
+                }
+              ]                     
           },
         ],
         review: [
@@ -323,7 +931,9 @@ const restaurants = [
         id: 106,
         image: require("../assets/images/restaurants/res6.jpeg"),
         restaurantName: "Seafood Delight",
-        location: "Sydney, Australia",
+        location: "South B",
+        lat:-1.3033,
+        long:36.8390,
         rate: 4.6,
         about: [
           {
@@ -336,37 +946,156 @@ const restaurants = [
         ],
         menu: [
           {
-            breakfast: [
-              {
-                id: 6,
-                image: "https://example.com/breakfast6.jpg",
-                name: "Salmon Bagel",
-                description: "Bagel with smoked salmon and cream cheese.",
-                cost: 10,
-                rate: 4.6,
-              },
-            ],
-            lunch: [
-              {
-                id: 6,
-                image: "https://example.com/lunch6.jpg",
-                name: "Fish & Chips",
-                description: "Battered fish served with crispy fries.",
-                cost: 15,
-                rate: 4.7,
-              },
-            ],
-            dinner: [
-              {
-                id: 6,
-                image: "https://example.com/dinner6.jpg",
-                name: "Grilled Lobster",
-                description:
-                  "Lobster grilled to perfection with garlic butter.",
-                cost: 40,
-                rate: 4.9,
-              },
-            ],
+              breakfast: [
+                {
+                  id: 1,
+                  image: require('@/assets/images/menu/breakfast/avocadotoast.png'),
+                  name: "Avocado Toast",
+                  description: "Toasted bread topped with smashed avocado, sea salt, and a sprinkle of chili flakes.",
+                  cost: 8,
+                  rate: 4.5
+                },
+                {
+                  id: 2,
+                  image: require('@/assets/images/menu/breakfast/pancakes.png'),
+                  name: "Pancakes with Maple Syrup",
+                  description: "Fluffy pancakes drizzled with rich maple syrup.",
+                  cost: 12,
+                  rate: 4.8
+                },
+                {
+                  id: 3,
+                  image: require('@/assets/images/menu/breakfast/benedict.png'),
+                  name: "Eggs Benedict",
+                  description: "Poached eggs with hollandaise sauce on an English muffin, served with ham or spinach.",
+                  cost: 14,
+                  rate: 4.7
+                },
+                {
+                  id: 4,
+                  image: require('@/assets/images/menu/breakfast/smoothiebowl.png'),
+                  name: "Smoothie Bowl",
+                  description: "Blended smoothie base topped with fresh fruits, granola, and nuts.",
+                  cost: 10,
+                  rate: 4.6
+                },
+                {
+                  id: 5,
+                  image: require('@/assets/images/menu/breakfast/oatmeal.png'),
+                  name: "Oatmeal with Berries",
+                  description: "Creamy oatmeal topped with fresh berries and a drizzle of honey.",
+                  cost: 7,
+                  rate: 4.4
+                },
+                {
+                  id: 6,
+                  image: require('@/assets/images/menu/breakfast/salmol.png'),
+                  name: "Salmon Bagel",
+                  description: "Bagel with smoked salmon and cream cheese.",
+                  cost: 10,
+                  rate: 4.6
+                }
+              ],
+              lunch: [
+                {
+                  id: 7,
+                  image: require('@/assets/images/menu/lunch/caesar.png'),
+                  name: "Chicken Caesar Salad",
+                  description: "Romaine lettuce with grilled chicken, Caesar dressing, and croutons.",
+                  cost: 13,
+                  rate: 4.5
+                },
+                {
+                  id: 8,
+                  image: require('@/assets/images/menu/lunch/sushi.png'),
+                  name: "Sushi Platter",
+                  description: "Assorted sushi rolls and sashimi served with soy sauce and wasabi.",
+                  cost: 20,
+                  rate: 4.8
+                },
+                {
+                  id: 9,
+                  image: require('@/assets/images/menu/lunch/veg.png'),
+                  name: "Vegetarian Wrap",
+                  description: "Whole wheat wrap filled with hummus, veggies, and avocado.",
+                  cost: 9,
+                  rate: 4.3
+                },
+                {
+                  id: 10,
+                  image: require('@/assets/images/menu/lunch/basel.png'),
+                  name: "Tomato Basil Soup",
+                  description: "Creamy tomato soup with a hint of basil, served with a side of bread.",
+                  cost: 8,
+                  rate: 4.2
+                },
+                {
+                  id: 11,
+                  image: require('@/assets/images/menu/lunch/steak.png'),
+                  name: "Steak Sandwich",
+                  description: "Grilled steak slices with caramelized onions, served in a hoagie roll.",
+                  cost: 15,
+                  rate: 4.6
+                },
+                {
+                  id: 12,
+                  image: require('@/assets/images/menu/lunch/fish.png'),
+                  name: "Fish & Chips",
+                  description: "Battered fish served with crispy fries.",
+                  cost: 15,
+                  rate: 4.7
+                }
+              ],
+              dinner: [
+                {
+                  id: 13,
+                  image: require('@/assets/images/menu/dinner/spaghetti.png'),
+                  name: "Spaghetti Carbonara",
+                  description: "Classic Italian pasta with creamy egg and pancetta sauce.",
+                  cost: 18,
+                  rate: 4.5
+                },
+                {
+                  id: 14,
+                  image: require('@/assets/images/menu/dinner/chicken.png'),
+                  name: "Grilled Chicken",
+                  description: "Juicy grilled chicken served with a side of vegetables.",
+                  cost: 22,
+                  rate: 4.6
+                },
+                {
+                  id: 15,
+                  image: require('@/assets/images/menu/dinner/veg.png'),
+                  name: "Vegetable Stir-Fry",
+                  description: "Mixed vegetables stir-fried in a savory sauce, served with rice.",
+                  cost: 16,
+                  rate: 4.3
+                },
+                {
+                  id: 16,
+                  image: require('@/assets/images/menu/dinner/beef.png'),
+                  name: "Beef Tacos",
+                  description: "Soft tortillas filled with seasoned beef, cheese, and salsa.",
+                  cost: 14,
+                  rate: 4.4
+                },
+                {
+                  id: 17,
+                  image: require('@/assets/images/menu/dinner/paela.png'),
+                  name: "Seafood Paella",
+                  description: "Traditional Spanish rice dish with shrimp, mussels, and calamari.",
+                  cost: 30,
+                  rate: 4.8
+                },
+                {
+                  id: 18,
+                  image: require('@/assets/images/menu/dinner/lobster.png'),
+                  name: "Grilled Lobster",
+                  description: "Lobster grilled to perfection with garlic butter.",
+                  cost: 40,
+                  rate: 4.9
+                }
+              ]                     
           },
         ],
         review: [
@@ -386,7 +1115,9 @@ const restaurants = [
         id: 107,
         image: require("../assets/images/restaurants/res7.jpeg"),
         restaurantName: "Vegan Bites",
-        location: "Berlin, Germany",
+        location: "Kilimani",
+        lat:-1.2927,
+        long:36.7865,
         rate: 4.5,
         about: [
           {
@@ -399,36 +1130,156 @@ const restaurants = [
         ],
         menu: [
           {
-            breakfast: [
-              {
-                id: 7,
-                image: "https://example.com/breakfast7.jpg",
-                name: "Avocado Toast",
-                description: "Whole grain toast topped with smashed avocado.",
-                cost: 7,
-                rate: 4.4,
-              },
-            ],
-            lunch: [
-              {
-                id: 7,
-                image: "https://example.com/lunch7.jpg",
-                name: "Vegan Buddha Bowl",
-                description: "Quinoa, chickpeas, and fresh veggies in a bowl.",
-                cost: 12,
-                rate: 4.6,
-              },
-            ],
-            dinner: [
-              {
-                id: 7,
-                image: "https://example.com/dinner7.jpg",
-                name: "Vegan Lasagna",
-                description: "Layered pasta with vegan cheese and vegetables.",
-                cost: 14,
-                rate: 4.7,
-              },
-            ],
+              breakfast: [
+                {
+                  id: 1,
+                  image: require('@/assets/images/menu/breakfast/avocadotoast.png'),
+                  name: "Avocado Toast",
+                  description: "Toasted bread topped with smashed avocado, sea salt, and a sprinkle of chili flakes.",
+                  cost: 8,
+                  rate: 4.5
+                },
+                {
+                  id: 2,
+                  image: require('@/assets/images/menu/breakfast/pancakes.png'),
+                  name: "Pancakes with Maple Syrup",
+                  description: "Fluffy pancakes drizzled with rich maple syrup.",
+                  cost: 12,
+                  rate: 4.8
+                },
+                {
+                  id: 3,
+                  image: require('@/assets/images/menu/breakfast/benedict.png'),
+                  name: "Eggs Benedict",
+                  description: "Poached eggs with hollandaise sauce on an English muffin, served with ham or spinach.",
+                  cost: 14,
+                  rate: 4.7
+                },
+                {
+                  id: 4,
+                  image: require('@/assets/images/menu/breakfast/smoothiebowl.png'),
+                  name: "Smoothie Bowl",
+                  description: "Blended smoothie base topped with fresh fruits, granola, and nuts.",
+                  cost: 10,
+                  rate: 4.6
+                },
+                {
+                  id: 5,
+                  image: require('@/assets/images/menu/breakfast/oatmeal.png'),
+                  name: "Oatmeal with Berries",
+                  description: "Creamy oatmeal topped with fresh berries and a drizzle of honey.",
+                  cost: 7,
+                  rate: 4.4
+                },
+                {
+                  id: 6,
+                  image: require('@/assets/images/menu/breakfast/salmol.png'),
+                  name: "Salmon Bagel",
+                  description: "Bagel with smoked salmon and cream cheese.",
+                  cost: 10,
+                  rate: 4.6
+                }
+              ],
+              lunch: [
+                {
+                  id: 7,
+                  image: require('@/assets/images/menu/lunch/caesar.png'),
+                  name: "Chicken Caesar Salad",
+                  description: "Romaine lettuce with grilled chicken, Caesar dressing, and croutons.",
+                  cost: 13,
+                  rate: 4.5
+                },
+                {
+                  id: 8,
+                  image: require('@/assets/images/menu/lunch/sushi.png'),
+                  name: "Sushi Platter",
+                  description: "Assorted sushi rolls and sashimi served with soy sauce and wasabi.",
+                  cost: 20,
+                  rate: 4.8
+                },
+                {
+                  id: 9,
+                  image: require('@/assets/images/menu/lunch/veg.png'),
+                  name: "Vegetarian Wrap",
+                  description: "Whole wheat wrap filled with hummus, veggies, and avocado.",
+                  cost: 9,
+                  rate: 4.3
+                },
+                {
+                  id: 10,
+                  image: require('@/assets/images/menu/lunch/basel.png'),
+                  name: "Tomato Basil Soup",
+                  description: "Creamy tomato soup with a hint of basil, served with a side of bread.",
+                  cost: 8,
+                  rate: 4.2
+                },
+                {
+                  id: 11,
+                  image: require('@/assets/images/menu/lunch/steak.png'),
+                  name: "Steak Sandwich",
+                  description: "Grilled steak slices with caramelized onions, served in a hoagie roll.",
+                  cost: 15,
+                  rate: 4.6
+                },
+                {
+                  id: 12,
+                  image: require('@/assets/images/menu/lunch/fish.png'),
+                  name: "Fish & Chips",
+                  description: "Battered fish served with crispy fries.",
+                  cost: 15,
+                  rate: 4.7
+                }
+              ],
+              dinner: [
+                {
+                  id: 13,
+                  image: require('@/assets/images/menu/dinner/spaghetti.png'),
+                  name: "Spaghetti Carbonara",
+                  description: "Classic Italian pasta with creamy egg and pancetta sauce.",
+                  cost: 18,
+                  rate: 4.5
+                },
+                {
+                  id: 14,
+                  image: require('@/assets/images/menu/dinner/chicken.png'),
+                  name: "Grilled Chicken",
+                  description: "Juicy grilled chicken served with a side of vegetables.",
+                  cost: 22,
+                  rate: 4.6
+                },
+                {
+                  id: 15,
+                  image: require('@/assets/images/menu/dinner/veg.png'),
+                  name: "Vegetable Stir-Fry",
+                  description: "Mixed vegetables stir-fried in a savory sauce, served with rice.",
+                  cost: 16,
+                  rate: 4.3
+                },
+                {
+                  id: 16,
+                  image: require('@/assets/images/menu/dinner/beef.png'),
+                  name: "Beef Tacos",
+                  description: "Soft tortillas filled with seasoned beef, cheese, and salsa.",
+                  cost: 14,
+                  rate: 4.4
+                },
+                {
+                  id: 17,
+                  image: require('@/assets/images/menu/dinner/paela.png'),
+                  name: "Seafood Paella",
+                  description: "Traditional Spanish rice dish with shrimp, mussels, and calamari.",
+                  cost: 30,
+                  rate: 4.8
+                },
+                {
+                  id: 18,
+                  image: require('@/assets/images/menu/dinner/lobster.png'),
+                  name: "Grilled Lobster",
+                  description: "Lobster grilled to perfection with garlic butter.",
+                  cost: 40,
+                  rate: 4.9
+                }
+              ]                     
           },
         ],
         review: [
@@ -448,7 +1299,9 @@ const restaurants = [
         id: 108,
         image: require("../assets/images/restaurants/res8.jpeg"),
         restaurantName: "Taco Fiesta",
-        location: "Mexico City, Mexico",
+        location: "South C",
+        lat:-1.3168,
+        long:36.8234,
         rate: 4.8,
         about: [
           {
@@ -461,36 +1314,156 @@ const restaurants = [
         ],
         menu: [
           {
-            breakfast: [
-              {
-                id: 8,
-                image: "https://example.com/breakfast8.jpg",
-                name: "Huevos Rancheros",
-                description: "Eggs with salsa and tortillas.",
-                cost: 6,
-                rate: 4.7,
-              },
-            ],
-            lunch: [
-              {
-                id: 8,
-                image: "https://example.com/lunch8.jpg",
-                name: "Tacos Al Pastor",
-                description: "Tacos with marinated pork and pineapple.",
-                cost: 8,
-                rate: 4.9,
-              },
-            ],
-            dinner: [
-              {
-                id: 8,
-                image: "https://example.com/dinner8.jpg",
-                name: "Enchiladas",
-                description: "Corn tortillas rolled with cheese and chicken.",
-                cost: 12,
-                rate: 4.8,
-              },
-            ],
+              breakfast: [
+                {
+                  id: 1,
+                  image: require('@/assets/images/menu/breakfast/avocadotoast.png'),
+                  name: "Avocado Toast",
+                  description: "Toasted bread topped with smashed avocado, sea salt, and a sprinkle of chili flakes.",
+                  cost: 8,
+                  rate: 4.5
+                },
+                {
+                  id: 2,
+                  image: require('@/assets/images/menu/breakfast/pancakes.png'),
+                  name: "Pancakes with Maple Syrup",
+                  description: "Fluffy pancakes drizzled with rich maple syrup.",
+                  cost: 12,
+                  rate: 4.8
+                },
+                {
+                  id: 3,
+                  image: require('@/assets/images/menu/breakfast/benedict.png'),
+                  name: "Eggs Benedict",
+                  description: "Poached eggs with hollandaise sauce on an English muffin, served with ham or spinach.",
+                  cost: 14,
+                  rate: 4.7
+                },
+                {
+                  id: 4,
+                  image: require('@/assets/images/menu/breakfast/smoothiebowl.png'),
+                  name: "Smoothie Bowl",
+                  description: "Blended smoothie base topped with fresh fruits, granola, and nuts.",
+                  cost: 10,
+                  rate: 4.6
+                },
+                {
+                  id: 5,
+                  image: require('@/assets/images/menu/breakfast/oatmeal.png'),
+                  name: "Oatmeal with Berries",
+                  description: "Creamy oatmeal topped with fresh berries and a drizzle of honey.",
+                  cost: 7,
+                  rate: 4.4
+                },
+                {
+                  id: 6,
+                  image: require('@/assets/images/menu/breakfast/salmol.png'),
+                  name: "Salmon Bagel",
+                  description: "Bagel with smoked salmon and cream cheese.",
+                  cost: 10,
+                  rate: 4.6
+                }
+              ],
+              lunch: [
+                {
+                  id: 7,
+                  image: require('@/assets/images/menu/lunch/caesar.png'),
+                  name: "Chicken Caesar Salad",
+                  description: "Romaine lettuce with grilled chicken, Caesar dressing, and croutons.",
+                  cost: 13,
+                  rate: 4.5
+                },
+                {
+                  id: 8,
+                  image: require('@/assets/images/menu/lunch/sushi.png'),
+                  name: "Sushi Platter",
+                  description: "Assorted sushi rolls and sashimi served with soy sauce and wasabi.",
+                  cost: 20,
+                  rate: 4.8
+                },
+                {
+                  id: 9,
+                  image: require('@/assets/images/menu/lunch/veg.png'),
+                  name: "Vegetarian Wrap",
+                  description: "Whole wheat wrap filled with hummus, veggies, and avocado.",
+                  cost: 9,
+                  rate: 4.3
+                },
+                {
+                  id: 10,
+                  image: require('@/assets/images/menu/lunch/basel.png'),
+                  name: "Tomato Basil Soup",
+                  description: "Creamy tomato soup with a hint of basil, served with a side of bread.",
+                  cost: 8,
+                  rate: 4.2
+                },
+                {
+                  id: 11,
+                  image: require('@/assets/images/menu/lunch/steak.png'),
+                  name: "Steak Sandwich",
+                  description: "Grilled steak slices with caramelized onions, served in a hoagie roll.",
+                  cost: 15,
+                  rate: 4.6
+                },
+                {
+                  id: 12,
+                  image: require('@/assets/images/menu/lunch/fish.png'),
+                  name: "Fish & Chips",
+                  description: "Battered fish served with crispy fries.",
+                  cost: 15,
+                  rate: 4.7
+                }
+              ],
+              dinner: [
+                {
+                  id: 13,
+                  image: require('@/assets/images/menu/dinner/spaghetti.png'),
+                  name: "Spaghetti Carbonara",
+                  description: "Classic Italian pasta with creamy egg and pancetta sauce.",
+                  cost: 18,
+                  rate: 4.5
+                },
+                {
+                  id: 14,
+                  image: require('@/assets/images/menu/dinner/chicken.png'),
+                  name: "Grilled Chicken",
+                  description: "Juicy grilled chicken served with a side of vegetables.",
+                  cost: 22,
+                  rate: 4.6
+                },
+                {
+                  id: 15,
+                  image: require('@/assets/images/menu/dinner/veg.png'),
+                  name: "Vegetable Stir-Fry",
+                  description: "Mixed vegetables stir-fried in a savory sauce, served with rice.",
+                  cost: 16,
+                  rate: 4.3
+                },
+                {
+                  id: 16,
+                  image: require('@/assets/images/menu/dinner/beef.png'),
+                  name: "Beef Tacos",
+                  description: "Soft tortillas filled with seasoned beef, cheese, and salsa.",
+                  cost: 14,
+                  rate: 4.4
+                },
+                {
+                  id: 17,
+                  image: require('@/assets/images/menu/dinner/paela.png'),
+                  name: "Seafood Paella",
+                  description: "Traditional Spanish rice dish with shrimp, mussels, and calamari.",
+                  cost: 30,
+                  rate: 4.8
+                },
+                {
+                  id: 18,
+                  image: require('@/assets/images/menu/dinner/lobster.png'),
+                  name: "Grilled Lobster",
+                  description: "Lobster grilled to perfection with garlic butter.",
+                  cost: 40,
+                  rate: 4.9
+                }
+              ]                     
           },
         ],
         review: [

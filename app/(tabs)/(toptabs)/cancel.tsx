@@ -4,10 +4,14 @@ import Container from '@/components/Reserve/Cancel/Container'
 
 export default function CancelTab() {
   return (
-    <View>
+    <View style={styles.container}>
       <Container />
     </View>
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container:{
+    flex:1
+  }
+})

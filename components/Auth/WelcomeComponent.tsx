@@ -27,7 +27,7 @@ const WelcomeComponent = ({keyboardVisible}:welcomeProps) => {
 
       <Animated.View entering={FadeInRight.duration(1000).delay(200).easing(Easing.ease)}  exiting={FadeOutRight.duration(1000).delay(200).easing(Easing.ease)}  style={{ flexDirection: 'column', alignItems: 'center', flex:.4 }}>
         <Image
-          source={require('../assets/images/Hi.png')}
+          source={require('@/assets/images/Hi.png')}
           tintColor={'#fff'}
           style={{ width: 60, height: 60 }}
         />
@@ -78,7 +78,7 @@ const ImageContainer = ({keyboardVisible}:welcomeProps) => {
       }}
     >
       <Image
-        source={require('../assets/images/share.png')}
+        source={require('@/assets/images/share.png')}
         style={[keyboardVisible ? { width: 90, height: 90 } : { width: 150, height: 150 }]}
       />
     </View>

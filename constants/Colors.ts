@@ -50,6 +50,7 @@ export const color = {
   navy:'#003366',
   green:'#008080',
   white:'#fff',
+  graywhite:'#f7f8f8',
   gray:'#cdd5d7',
   black:'#000'
 }

@@ -1,88 +1,70 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
-import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { Slot, Stack, useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import * as SplashScreen from "expo-splash-screen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Provider } from "react-redux";
+import { Store } from "@/redux/store/Store";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Toast from "react-native-toast-message";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+// Prevent the splash screen from hiding automatically
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [isOnboardingComplete, setOnboardingComplete] = useState(false);
-  const [isAuthenticated, setAuthenticated] = useState(false);
+  const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setAuthenticated] = useState(false);
+  const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
 
-  const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-  });
+  const router = useRouter();
+  const client = new QueryClient();
 
+  // Check user status only after component is mounted
   useEffect(() => {
-    // Check AsyncStorage for onboarding and authentication status
-    const checkOnboardingAndAuthStatus = async () => {
+    const checkUserStatus = async () => {
       const onboardingStatus = await AsyncStorage.getItem("hasSeenOnboard");
-     // const authToken = await AsyncStorage.getItem("AuthToken");
+      const userObj = JSON.parse((await AsyncStorage.getItem("userObj")) || "{}");
+      const authToken = userObj.token;
 
-      setOnboardingComplete(!!onboardingStatus);
-      //setAuthenticated(!!authToken);
+      setUserData(userObj);
+      setHasSeenOnboarding(!!onboardingStatus);
+      setAuthenticated(!!authToken);
       setIsLoading(false);
+
+      if (authToken) {
+        router.replace(hasSeenOnboarding ? "/" : "/(auth)/");
+      } else {
+        router.replace("/(auth)/signin");
+      }
     };
 
-    checkOnboardingAndAuthStatus();
-  }, []);
+    checkUserStatus();
+  }, [router, hasSeenOnboarding]);
 
   useEffect(() => {
-    if (loaded && !isLoading) {
+    if (!isLoading) {
       SplashScreen.hideAsync();
     }
-  }, [loaded, isLoading]);
+  }, [isLoading]);
 
-  if (isLoading || !loaded) {
-    return null; // Keep splash screen while loading fonts and checking storage
+  if (isLoading) {
+    return null;
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Stack>
-        {/* Onboarding screen for new users */}
-        {!isOnboardingComplete && (
-          <Stack.Screen
-            name="screens/onboarding"
-            options={{ headerShown: false }}
-          />
-        )}
-
-        {/* Auth screens if not authenticated */}
-        {isOnboardingComplete && !isAuthenticated && (
-          <>
-            <Stack.Screen
-              name="auth/signin"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="auth/signup"
-              options={{ headerShown: false }}
-            />
-          </>
-        )}
-
-        {/* Main app screens after authentication */}
-        {isAuthenticated && (
-          <>
+    <Provider store={Store}>
+      <QueryClientProvider client={client}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="screens/restaurantdetails" />
-            <Stack.Screen name="screens/search" />
-            <Stack.Screen name="+not-found" />
-          </>
-        )}
-      </Stack>
-    </GestureHandlerRootView>
+            <Stack.Screen name="screens" options={{ headerShown: false }} />
+          </Stack>
+          <Toast />
+        </GestureHandlerRootView>
+      </QueryClientProvider>
+    </Provider>
   );
 }

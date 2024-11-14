@@ -6,7 +6,7 @@ import { color } from '@/constants/Colors'
 export default function Promotions() {
   return (
     <>
-    <View style={{ marginBottom: 20,marginTop:20 }}>
+    <View style={{marginVertical:20, }}>
         <View style={styles.imageHeader}>
           <View
             style={{
@@ -14,7 +14,7 @@ export default function Promotions() {
               justifyContent: "space-between",
               paddingHorizontal: 20,
               alignItems: "center",
-              height: 95,
+              
             }}
           >
             <View style={{ flexDirection: "column", alignItems: "center",justifyContent:'space-between' }}>
@@ -79,12 +79,10 @@ export default function Promotions() {
 
 const styles = StyleSheet.create({
     imageHeader: {
-        marginTop: 20,
-        //backgroundColor: "#4d81f1",
+        paddingVertical:10,
         backgroundColor:color.green,
         borderRadius: 15,
         borderWidth: 2,
-        //borderColor: "#4d81f1",
         borderColor:color.green,
         shadowColor: "#000",
         shadowOffset: {

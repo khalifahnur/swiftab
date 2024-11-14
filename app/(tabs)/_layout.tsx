@@ -41,14 +41,13 @@ const TabLayout: React.FC = () => {
               flexDirection: "row",
               justifyContent: "center",
               borderRadius: 30,
+              alignItems:'center',
               //backgroundColor: Colors[colorScheme??'light'].tabBackground,
               backgroundColor: color.gray,
               bottom: 5,
-              left: 20,
-              right: 20,
+              marginHorizontal:20,
               elevation: 0,
               height: 55,
-              width: BOTTOM_WIDTH,
               position: "absolute",
             }}
           >
@@ -58,7 +57,7 @@ const TabLayout: React.FC = () => {
                 justifyContent: "space-between",
                 width: "100%",
                 alignItems: "center",
-                paddingHorizontal: 10,
+                paddingHorizontal: 5,
               }}
             >
               {state.routes.map((route, index) => {

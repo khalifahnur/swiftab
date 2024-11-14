@@ -20,20 +20,34 @@ export default function PhoneNumberInp({ onPhoneNumberChange }: PhoneNumberInpPr
   }
 
   return (
-    <View style={{ paddingHorizontal: 40, marginTop: 20, marginBottom: 10 }}>
-      <Text style={{
-        fontSize: 16,
-        color: "#000",
-        fontWeight: "500",
-        marginBottom: 5,
-        textAlign: "left",
-      }}>Phone Number</Text>
+    <View>
       <PhoneInput
         value={inputValue}
         onChangePhoneNumber={handleInputValue}
         selectedCountry={selectedCountry}
         onChangeSelectedCountry={handleSelectedCountry}
         defaultCountry='KE'
+        phoneInputStyles={{
+          container: {
+            borderWidth: 1,
+            borderStyle: 'solid',
+            borderColor: '#D1D5DB',
+          },
+          flagContainer: {
+            borderTopLeftRadius: 7,
+            borderBottomLeftRadius: 7,
+            backgroundColor: '#F8F9FA',
+            justifyContent: 'center',
+          },
+          flag: {},
+          caret: {
+            color: '#000',
+            fontSize: 16,
+          },
+          divider: {
+            backgroundColor: '#D1D5DB',
+          }
+        }}
       />
     </View>
   );

@@ -9,6 +9,8 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import {theme} from '@/constants/themes/theme'
+import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const AnimatedFeather = Animated.createAnimatedComponent(Feather);
@@ -24,6 +26,8 @@ export function Button({
   flatListIndex,
   flatListRef,
 }: ButtonProps) {
+  const router = useRouter();
+
   const buttonAnimationStyle = useAnimatedStyle(() => {
     const isLastScreen = flatListIndex.value === dataLength - 1;
     return {
@@ -35,12 +39,13 @@ export function Button({
   const arrowAnimationStyle = useAnimatedStyle(() => {
     const isLastScreen = flatListIndex.value === dataLength - 1;
     return {
-      opacity: isLastScreen ? withTiming(0) : withTiming(1),
+      opacity: withTiming(isLastScreen ? 0 : 1, { duration: 300 }),
       transform: [
-        { translateX: isLastScreen ? withTiming(100) : withTiming(0) },
+        { translateX: withTiming(isLastScreen ? 10 : 0, { duration: 300 }) },
       ],
     };
   });
+  
 
   const textAnimationStyle = useAnimatedStyle(() => {
     const isLastScreen = flatListIndex.value === dataLength - 1;
@@ -52,10 +57,13 @@ export function Button({
     };
   });
 
-  const handleNextScreen = () => {
+  const handleNextScreen = async() => {
     const isLastScreen = flatListIndex.value === dataLength - 1;
     if (!isLastScreen) {
       flatListRef.current?.scrollToIndex({ index: flatListIndex.value + 1 });
+    }else{
+      await AsyncStorage.setItem('hasSeenOnboard', 'true');
+      router.replace('/(auth)/');
     }
   };
 

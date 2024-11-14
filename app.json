@@ -1,31 +1,26 @@
 {
   "expo": {
-    "name": "swiftab",
-    "slug": "swiftab",
+    "name": "Swiftab",
+    "slug": "Swiftab",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/st/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/st/icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#008080"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/st/preview.png",
+        "backgroundColor": "#008080"
       },
       "package": "com.lifkha.swiftab"
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",
@@ -33,6 +28,27 @@
         "@rnmapbox/maps",
         {
           "RNMapboxMapsDownloadToken": "sk.eyJ1IjoibGlma2hhIiwiYSI6ImNtMXdpdnVnejBjZTEyanM5aWl5cHdjZnMifQ.NAoD6a6lcDVly8JugZ6TTA"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(SwifTab) to use your location."
+        }
+      ],
+      [
+        "react-native-vision-camera",
+        {
+          "cameraPermissionText": "$(SwifTab) needs access to your Camera.",
+          "enableMicrophonePermission": false,
+          "microphonePermissionText": "$(SwifTab) needs access to your Microphone.",
+          "enableCodeScanner": true
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ]
     ],

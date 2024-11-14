@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   },
 
   cancelButton: {
-    backgroundColor: color.green,
+    backgroundColor: color.navy,
     paddingVertical: 8,
     paddingHorizontal: 15,
     borderRadius: 5,
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     alignSelf:'flex-end'
   },
   cancelText: {
-    color: 'red',
+    color: '#fff',
     fontWeight: 'bold',
     textAlign:'center'
   },

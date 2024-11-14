@@ -4,14 +4,33 @@ import moment from "moment";
 import { AntDesign } from "@expo/vector-icons";
 import Search from "./Search";
 import { color } from "@/constants/Colors";
+import { useRouter } from "expo-router";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store/Store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 type headerProps = {
   headerLayout:(event: LayoutChangeEvent) => void;
   //marginBottomPosition:number;
 }
+
 export default function Header({headerLayout}:headerProps) {
   const [greeting, setGreeting] = useState<string>("");
+  const [userData, setUserData] = useState({});
+
+  const route = useRouter();
+  const cart = useSelector((item: RootState) => item.cart.cart);
+
+  useEffect(() => {
+    const FetchData = async () => {
+      const userObj = JSON.parse(
+        (await AsyncStorage.getItem("userObj")) || "{}"
+      );
+      setUserData(userObj.user);
+    };
+    FetchData();
+  }, []);
 
   useEffect(() => {
     const hour = moment().hour();
@@ -33,9 +52,14 @@ export default function Header({headerLayout}:headerProps) {
       <View style={styles.header}>
         <View>
           <Text style={styles.greetings}>{greeting},</Text>
-          <Text style={styles.name}>Khalif</Text>
+          <Text style={styles.name}>{userData.name}</Text>
         </View>
-        <Pressable style={styles.cart}>
+        <Pressable style={styles.cart} onPress={()=>route.navigate("/screens/cart")}>
+        {cart?.length > 0 && (
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>{cart.length}</Text>
+        </View>
+      )}
           <AntDesign name="shoppingcart" size={20} color="black" />
         </Pressable>
       </View>
@@ -48,7 +72,7 @@ export default function Header({headerLayout}:headerProps) {
 
 const styles = StyleSheet.create({
   container: {
-    padding:20
+    padding:20,
   },
   header: {
     flexDirection: "row",
@@ -73,5 +97,19 @@ const styles = StyleSheet.create({
   search: {
     marginVertical: 15,
     alignItems:'center',
+  },
+  badge: {
+    position: "absolute",
+    height:20,
+    width:20,
+    backgroundColor: "red",
+    top: -10,
+    right: 0,
+    borderRadius: 20,
+  },
+  badgeText: {
+    color: "#fff", 
+    fontSize: 12,
+    textAlign:"center"
   },
 });

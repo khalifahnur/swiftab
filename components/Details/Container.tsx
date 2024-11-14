@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -10,126 +10,121 @@ import {
 } from "react-native";
 import Animated, {
   Extrapolation,
-  FadeIn,
   interpolate,
   interpolateColor,
-  runOnJS,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
-import SectionTabs from "./SectionTabs";
 import About from "./About";
 import Menu from "./Menu";
 import Reviews from "./Reviews";
 import Info from "./Info";
-import { makeShareable } from "react-native-reanimated/lib/typescript/reanimated2/shareables";
-import { ScrollView } from "react-native";
 import { color } from "@/constants/Colors";
+import { useDispatch, useSelector } from "react-redux";
+import { addToWishlist, removeToWishlist } from "@/redux/WishlistSlice";
+import { RootState } from "@/redux/store/Store";
 
-export const { height: sHeight, width: sWidth } = Dimensions.get("screen");
+const { height: sHeight, width: sWidth } = Dimensions.get("screen");
+const ImageHeight = 300;
 
-const ImageHeight = 280;
-const SECTION_HEIGHT = 300;
-
-const HeaderAnim1 = () => {
+const Container = () => {
   const params = useLocalSearchParams();
   const data = JSON.parse(params.data);
-  console.log(data);
+  console.log("data","=>",data)
   const menu = data.menu;
+  console.log("menu","=>",menu)
   const reviews = data.review;
+  console.log("review","=>",reviews)
+
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const wishlistCart = useSelector((state: RootState) => state.wishlist.wishlist);
+  const dataIndex = wishlistCart.some((item) => item.id === data?.id);
 
-  const visibleIndex = useSharedValue(0);
-  const topTabsRef = useRef(null);
-  const sectionRef = useRef(null);
-
-  // Refs for section measurements
-  const aboutSectionRef = useRef(null);
-  const menuSectionRef = useRef(null);
-  const reviewSectionRef = useRef(null);
-
-  // Array holding all the section refs for scrolling
-  const sections = [aboutSectionRef, menuSectionRef, reviewSectionRef];
-
-  const heights = Array.isArray(data) ? data.map(() => SECTION_HEIGHT) : [];
-  // heights => [350,350,350]
+  const HandleWishlist = () => {
+    if (!dataIndex) {
+      dispatch(addToWishlist(data));
+    } else {
+      dispatch(removeToWishlist(data.id));
+    }
+  };
 
   const scrollY = useSharedValue(0);
-
-  const getOffsetStarts = () => {
-    "worklet"; // Mark this function as a worklet
-    return heights.map((v, i) =>
-      heights.slice(0, i).reduce((x, acc) => x + acc, 0)
-    );
-  };
-
-  const handleOffset = (offset) => {
-    const distancesFromTop = getOffsetStarts().map((v) => Math.abs(v - offset));
-    const newIndex = distancesFromTop.indexOf(
-      Math.min.apply(null, distancesFromTop)
-    );
-
-    if (visibleIndex.value !== newIndex) {
-      topTabsRef.current?.scrollToIndex({
-        index: newIndex,
-        animated: true,
-      });
-    }
-    visibleIndex.value = newIndex;
-  };
-
-  const handleScroll = useAnimatedScrollHandler((event) => {
-    scrollY.value = event.contentOffset.y;
-    const offset = event.contentOffset?.y;
-
-    if (offset !== undefined) {
-      runOnJS(handleOffset)(offset);
-    }
-  });
 
   const onScroll = useAnimatedScrollHandler((event) => {
     scrollY.value = event.contentOffset.y;
   });
 
-  const scrollAnimatedStyles = useAnimatedStyle(() => {
-    const translateY = interpolate(
-      scrollY.value,
-      [0, 320],
-      [0, -ImageHeight - 40],
-      Extrapolation.CLAMP
-    );
-    return { transform: [{ translateY }] };
-  });
-
+ 
   const headerViewAnimatedStyles = useAnimatedStyle(() => {
     const backgroundColor = interpolateColor(
       scrollY.value,
-      [0, 320],
+      [0, ImageHeight],
       ["transparent", color.green]
     );
     return { backgroundColor };
   });
 
+ 
+
+  
+
+
   const titleAnimatedStyles = (fadeIn: boolean) =>
     useAnimatedStyle(() => {
-      const outputRange = fadeIn ? [0, 0, 1] : [1, 0, 0];
-      const opacity = interpolate(scrollY.value, [0, 120, 320], outputRange);
+      const opacity = interpolate(
+        scrollY.value,
+        [0, 150, ImageHeight], 
+        fadeIn ? [0, 0, 1] : [1, 0.5, 0], 
+        Extrapolation.CLAMP
+      );
       return { opacity };
     });
 
-  const animatedImageStyles = useAnimatedStyle(() => {
-    const scale = interpolate(scrollY.value, [0, 320], [1.4, 1], {
-      extrapolateRight: Extrapolation.CLAMP,
-    });
-    return { transform: [{ scale }] };
+const animatedImageStyles = useAnimatedStyle(() => {
+    const scale = interpolate(
+      scrollY.value,
+      [0, ImageHeight+20], 
+      [1.4, 1],
+      Extrapolation.CLAMP
+    );
+    const translateY = interpolate(
+      scrollY.value,
+      [-ImageHeight, 0, ImageHeight],
+      [ImageHeight * 0.3, 0, ImageHeight * 0.5], // combines up and down effects
+      Extrapolation.CLAMP
+    );
+  
+    return { transform: [{ scale },] };
   });
 
-  //const exampleData = Array.from({ length: 1000 }, (_, i) => i + 1);
+const scrollAnimatedStyles = useAnimatedStyle(() => {
+    const translateY = interpolate(
+      scrollY.value,
+      [ 0, ImageHeight + 300], 
+      [ 0, -ImageHeight - 45 ],
+      Extrapolation.CLAMP
+    );
+    return { transform: [{ translateY }] };
+  });
+
+   // const scrollAnimatedStyles = useAnimatedStyle(() => {
+  //   const translateY = interpolate(
+  //     scrollY.value,
+  //     [0, 320],
+  //     [0, -ImageHeight - 40],
+  //     Extrapolation.CLAMP
+  //   );
+  //   return { transform: [{ translateY }] };
+  // });
+
+
+
   return (
     <>
       <View style={styles.container}>
@@ -140,12 +135,13 @@ const HeaderAnim1 = () => {
         >
           <AntDesign name="left" size={20} color="#fff" />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.heartButton}
-        >
-          <AntDesign name="hearto" size={20} color="#fff" />
+        <TouchableOpacity style={styles.heartButton} onPress={HandleWishlist}>
+          <AntDesign
+            name="heart"
+            size={20}
+            color={dataIndex ? "red" : "white"}
+          />
         </TouchableOpacity>
-        
         <Animated.View style={[styles.headerImage, animatedImageStyles]}>
           <Image
             source={data.image}
@@ -160,78 +156,45 @@ const HeaderAnim1 = () => {
 
         <Animated.View style={scrollAnimatedStyles}>
           <Animated.View style={[styles.headerView, headerViewAnimatedStyles]}>
-            <View>
               <Animated.Text style={[styles.title, titleAnimatedStyles(false)]}>
                 {data.restaurantName}
               </Animated.Text>
               <Animated.Text style={[styles.title2, titleAnimatedStyles(true)]}>
                 {data.restaurantName}
               </Animated.Text>
-            </View>
+            
           </Animated.View>
-
           <Animated.ScrollView
             onScroll={onScroll}
+            scrollEventThrottle={16} // for smoother animation handling
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 120 }}
+            removeClippedSubviews={true}
             style={{ backgroundColor: color.gray, zIndex: 99 }}
           >
             <View style={styles.innerContainer}>
-              {/* info */}
               <Info data={data} />
-              <View
-                style={{
-                  width: "100%",
-                  borderWidth: 1,
-                  marginTop: 20,
-                  borderColor: "#999",
-                }}
-              />
-              
-              {/* Top Tabs */}
-              {/* <SectionTabs
-                visibleIndex={visibleIndex}
-                sectionRef={sectionRef}
-                topTabRef={topTabsRef}
-                sections={sections}
-              /> */}
-              
-              {/* Section Content */}
-              <ScrollView ref={sectionRef}>
-                {/* About Section */}
-                <View ref={aboutSectionRef}>
-                  <About data={data} />
-                </View>
-
-                {/* Menu Section */}
-                <View ref={menuSectionRef}>
-                  <Menu menu={menu} />
-                </View>
-
-                {/* Reviews Section */}
-                <View ref={reviewSectionRef}>
-                  <Reviews reviews={reviews} />
-                </View>
-              </ScrollView>
+              <View style={styles.divider} />
+              <View>
+                <About data={data} />
+                <Menu menu={menu} />
+                <Reviews reviews={reviews} />
+              </View>
             </View>
           </Animated.ScrollView>
         </Animated.View>
       </View>
-      {/* footer */}
-      <View style={{ backgroundColor: color.gray, padding: 10 }}>
+      <View style={styles.footer}>
         <TouchableOpacity
-          style={{ padding: 20, backgroundColor: color.green, borderRadius: 10 }}
+          style={styles.reserveButton}
+          onPress={() =>
+            router.navigate({
+              pathname: "/screens/reserve",
+              params: { data: JSON.stringify(data) },
+            })
+          }
         >
-          <Text
-            style={{
-              color: "#fff",
-              fontSize: 15,
-              fontWeight: "500",
-              textAlign: "center",
-            }}
-          >
-            Reserve Now
-          </Text>
+          <Text style={styles.reserveButtonText}>Reserve Now</Text>
         </TouchableOpacity>
       </View>
     </>
@@ -276,7 +239,7 @@ const styles = StyleSheet.create({
   headerView: {
     width: "100%",
     justifyContent: "center",
-    paddingVertical: 15,
+    height:100
   },
   title: {
     fontSize: 38,
@@ -284,6 +247,8 @@ const styles = StyleSheet.create({
     color: "orange",
     marginHorizontal: 20,
     position: "absolute",
+    top:0,
+    left:0,
   },
   title2: {
     fontSize: 18,
@@ -291,33 +256,31 @@ const styles = StyleSheet.create({
     color: "orange",
     marginHorizontal: 20,
     textAlign: "center",
-    marginTop: 35,
+    
   },
   innerContainer: {
     margin: 20,
   },
-  listItem: {
-    width: 100,
-    height: 100,
-    borderRadius: 14,
-    backgroundColor: "#eee",
-    marginRight: 16,
+  divider: {
+    width: "100%",
+    borderWidth: 1,
+    marginTop: 20,
+    borderColor: "#999",
   },
-  text: {
-    fontSize: 20,
-    color: "#eee",
-    fontWeight: "600",
+  footer: {
+    backgroundColor: color.gray,
+    padding: 10,
   },
-  text2: {
-    fontSize: 16,
-    color: "#112233",
-    marginTop: 10,
-    fontWeight: "600",
+  reserveButton: {
+    padding: 20,
+    backgroundColor: color.green,
+    borderRadius: 10,
   },
-  description: {
-    fontSize: 16,
-    color: "#e0e0e0",
-    textAlign: "justify",
+  reserveButtonText: {
+    color: "#fff",
+    fontSize: 15,
+    fontWeight: "500",
+    textAlign: "center",
   },
   imageOverlay: {
     height: ImageHeight + 50,
@@ -325,4 +288,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HeaderAnim1;
+export default Container;

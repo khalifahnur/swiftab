@@ -82,6 +82,6 @@ const styles = StyleSheet.create({
     height: 10,
     borderRadius: 5,
     backgroundColor: theme.colors.backgroundHighlightColor,
-    marginHorizontal: 10,
+    marginHorizontal: 10
   },
 });

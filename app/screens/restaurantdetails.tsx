@@ -2,7 +2,6 @@ import { StyleSheet } from "react-native";
 import React, { useLayoutEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Header from "@/components/Details/Header";
 import Container from "@/components/Details/Container";
 
 export default function RestaurantDetailsScreen() {

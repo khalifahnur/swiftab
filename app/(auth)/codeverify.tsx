@@ -19,6 +19,7 @@ import {
 } from "react-native-confirmation-code-field";
 import axios from "axios";
 import Constants from "expo-constants";
+import { color } from "@/constants/Colors";
 
 const CELL_COUNT = 4;
 
@@ -56,19 +57,10 @@ export default function VerifyScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.closebtn}
-          onPress={() => router.navigate("/(auth)/signin")}
-        >
-          <EvilIcons name="close" size={20} color="#999" />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.subContainer}>
         <View style={styles.subheader}>
-          <Text style={styles.headertxt}>Verification Code</Text>
+          <Text style={styles.headertxt}>Please check your email</Text>
           <Text style={styles.headersubtxt}>
-            We send A verification code to abc@gmail.com
+            We've send A code to abc@gmail.com
           </Text>
         </View>
         <View style={styles.textinp}>
@@ -99,13 +91,9 @@ export default function VerifyScreen() {
           />
         </View>
 
-        <Pressable 
-        style={styles.resetbtn} 
-        //onPress={VerifyCodeHandler}
-        >
-          <Text style={{ color: "#fff" }}>Continue</Text>
-        </Pressable>
-      </View>
+        <TouchableOpacity style={styles.resendButton} onPress={()=>router.push("/(auth)/newpassword")}>
+        <Text style={styles.resendBtnTxt}>Verify</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -113,24 +101,12 @@ export default function VerifyScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F2F4F7",
-    paddingHorizontal: 20,
-  },
-  header: {
-    marginTop: 20,
-    marginLeft: "auto",
-  },
-  closebtn: {
-    padding: 20,
-    backgroundColor: "#e8e8e8",
-    borderRadius: 30,
-  },
-  subContainer: {
-    justifyContent: "center",
-    flex: 0.7,
+    backgroundColor: "#F8F9FA",
+    padding: 24,
   },
   subheader: {
     alignItems: "center",
+    marginVertical:24,
   },
   headersubtxt: {
     fontSize: 14,
@@ -162,5 +138,16 @@ const styles = StyleSheet.create({
   },
   focusCell: {
     borderColor: "#000",
+  },
+  resendButton: {
+    borderRadius: 8,
+    padding: 16,
+    alignItems: "center",
+    backgroundColor: color.green,
+    marginTop: 10,
+  },
+  resendBtnTxt: {
+    color: "#fff",
+    fontWeight: "600",
   },
 });
