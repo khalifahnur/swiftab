@@ -12,7 +12,7 @@ export default function Receipt({ children }: ReceiptProps) {
       style={{
         width: '100%',
         height: '70%',
-        backgroundColor: color.gray,
+        backgroundColor: "#e4e4e4",
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',

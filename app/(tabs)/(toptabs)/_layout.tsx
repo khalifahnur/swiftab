@@ -21,21 +21,25 @@ const TopTabLayout = () => {
     <MaterialTopTabs
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: "#f5f5f5",
+          backgroundColor: "transparent",
         },
+        tabBarPressOpacity:0,
+        tabBarPressColor:"transparent",
         tabBarActiveTintColor: color.green,
         tabBarInactiveTintColor: "#1E1E1E",
         tabBarIndicatorStyle: {
           backgroundColor: color.green,
         },
         tabBarLabelStyle: {
-          fontSize: 14,
-          fontWeight: "600",
+          fontSize: 11,
+          fontWeight: "500",
         },
+        
       }}
     >
-      <MaterialTopTabs.Screen name="index" options={{ title: "Reservation" }} />
-      <MaterialTopTabs.Screen name="cancel" options={{ title: "Cancel" }} />
+      <MaterialTopTabs.Screen name="index" options={{ title: "Active" }} />
+      <MaterialTopTabs.Screen name="history" options={{ title: "Completed" }} />
+      <MaterialTopTabs.Screen name="cancel" options={{ title: "Cancelled" }} />
     </MaterialTopTabs>
   );
 };

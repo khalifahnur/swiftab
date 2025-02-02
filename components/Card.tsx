@@ -16,6 +16,7 @@ type cardProps = {
   rate: number;
   location: string;
   handlePress: () => void;
+  cardWidth?:number | 220
 };
 export default function Card({
   image,
@@ -23,10 +24,11 @@ export default function Card({
   rate,
   location,
   handlePress,
+  cardWidth
 }: cardProps) {
   return (
-    <TouchableOpacity onPress={handlePress} style={styles.card}>
-      <Image source={image} style={styles.restaurantImage} />
+    <TouchableOpacity onPress={handlePress} style={[styles.card,{width:cardWidth}]}>
+      <Image source={{uri:image}} style={styles.restaurantImage} />
       <View style={styles.detailsContainer}>
         <View style={styles.detail}>
           <Text style={styles.restaurantName}>{restaurantName}</Text>
@@ -55,7 +57,6 @@ const styles = StyleSheet.create({
     elevation: 1,
     borderRadius: 10,
     marginHorizontal: 10,
-    width: 220,
     marginBottom: 5,
   },
   restaurantImage: {

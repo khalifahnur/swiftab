@@ -3,7 +3,13 @@ import React from "react";
 import useStore from "@/store/useStore";
 
 export default function TimeTab() {
-  const { selectedTime, setSelectedTime } = useStore();
+  const {
+    selectedStartTime,
+    setSelectedStartTime,
+    selectedEndTime,
+    setSelectedEndTime,
+  } = useStore();
+
   const timeSlots = [
     {
       title: "Breakfast",
@@ -42,9 +48,18 @@ export default function TimeTab() {
   ];
 
   const handleTimeSelect = (time: string) => {
-    setSelectedTime(time);
+    if (!selectedStartTime || selectedEndTime) {
+      setSelectedStartTime(time);
+      setSelectedEndTime(''); // Reset end time if a new start time is selected
+    } else {
+      if (time > selectedStartTime) {
+        setSelectedEndTime(time);
+      } else {
+        alert("End time must be after start time");
+      }
+    }
   };
-  console.log(selectedTime);
+
   return (
     <View style={styles.timeSlots}>
       {timeSlots.map((slot, index) => (
@@ -57,12 +72,13 @@ export default function TimeTab() {
                 onPress={() => handleTimeSelect(time)}
                 style={[
                   styles.timeButton,
-                  selectedTime === time && styles.timeSelected,
+                  selectedStartTime === time && styles.timeStartSelected,
+                  selectedEndTime === time && styles.timeEndSelected,
                 ]}
               >
                 <Text
                   style={
-                    selectedTime === time
+                    selectedStartTime === time || selectedEndTime === time
                       ? styles.timeTextSelected
                       : styles.timeText
                   }
@@ -79,32 +95,6 @@ export default function TimeTab() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: "#f7f8f8",
-  },
-  tabs: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 20,
-  },
-  tabButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    backgroundColor: "#e0e0e0",
-  },
-  tabSelected: {
-    backgroundColor: "#000",
-  },
-  tabText: {
-    fontSize: 16,
-    color: "#000",
-  },
-  tabTextSelected: {
-    color: "#fff",
-  },
   timeSlots: {
     flex: 1,
   },
@@ -127,24 +117,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#e0e0e0",
   },
-  timeSelected: {
-    backgroundColor: "#000",
+  timeStartSelected: {
+    backgroundColor: "#008000", // Green for start time
+  },
+  timeEndSelected: {
+    backgroundColor: "#0000FF", // Blue for end time
   },
   timeText: {
     color: "#000",
   },
   timeTextSelected: {
     color: "#fff",
-  },
-  nextButton: {
-    marginTop: 20,
-    padding: 15,
-    borderRadius: 10,
-    backgroundColor: "#000",
-    alignItems: "center",
-  },
-  nextButtonText: {
-    color: "#fff",
-    fontSize: 16,
   },
 });

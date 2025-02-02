@@ -11,90 +11,41 @@ import React from "react";
 import Card from "../Card";
 import { color } from "@/constants/Colors";
 import { useRouter } from "expo-router";
+import { Menu, RestaurantData } from "@/types";
 
-type restaurantsProps = {
-  id: number;
-  image: any;
-  restaurantName: string;
-  location: string;
-  rate: number;
-  about: {
-    id: number;
-    cuisine: string;
-    location: string;
-    averageprice: number;
-    hrsofoperation: string;
-  }[];
-  menu: {
-    breakfast: {
-      id: number;
-      image: string;
-      name: string;
-      description: string;
-      cost: number;
-      rate: number;
-    }[];
-    lunch: {
-      id: number;
-      image: string;
-      name: string;
-      description: string;
-      cost: number;
-      rate: number;
-    }[];
-    dinner: {
-      id: number;
-      image: string;
-      name: string;
-      description: string;
-      cost: number;
-      rate: number;
-    }[];
-  }[];
-  review: {
-    review: {
-      name: string;
-      image: string;
-      reviewTxt: string;
-      rating: number;
-    };
-  }[];
-}[];
-
-interface RestaurantData {
-  about: {
-    averageprice: number;
-    cuisine: string;
-    hrsofoperation: string;
-    id: number;
-    location: string;
-  }[];
-  id: number;
-  image: number;
-  location: string;
-  menu: {
-    breakfast: any[];
-    dinner: any[];
-    lunch: any[];
-  };
-  rate: number;
-  restaurantName: string;
-  review: {
-    review: any[];
-  };
+interface RestaurantsProps {
+ // data:  RestaurantData; 
+ 
 }
 
-export default function Restaurants({ data }: restaurantsProps) {
+type RestaurantProps = {
+  _id: string; 
+  about: object[]; 
+  image: string; 
+  latitude: number; 
+  location: string; 
+  longitude: number; 
+  menu: Menu;
+  rate: number; 
+  restaurantId: string; 
+  restaurantName: string; 
+  review: object[];
+};
+
+export default function Restaurants({ data }:RestaurantProps) {
   const window = useWindowDimensions();
   const item_width =
     Platform.OS === "ios" ? window.width * 0.89 : window.width * 0.55;
   const route = useRouter();
 
-  const NavigateHandler = (data:RestaurantData) => {
-    route.push({
-      pathname: "/screens/restaurantdetails",
-      params: { data: JSON.stringify(data) },
-    });
+  const NavigateHandler = (RestaurantData:RestaurantData) => {
+    return(
+      route.push({
+        pathname: "/screens/restaurantdetails",
+        params: { data: JSON.stringify(RestaurantData) },
+      })
+    )
+    
   };
   return (
     <>
@@ -104,13 +55,15 @@ export default function Restaurants({ data }: restaurantsProps) {
         snapToAlignment="center"
         decelerationRate={Platform.OS === "ios" ? 0 : 0}
         renderItem={({ item }) => {
+          const imgUrl = item.image
           return (
             <Card
-              image={item.image}
+              image={imgUrl}
               restaurantName={item.restaurantName}
               rate={item.rate}
               location={item.location}
               handlePress={() => NavigateHandler(item)}
+              cardWidth={220}
             />
           );
         }}

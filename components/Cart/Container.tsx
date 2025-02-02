@@ -31,7 +31,7 @@ export default function Container() {
 
   const cart = useSelector((state: RootState) => state.cart.cart);
   const dispatch = useDispatch();
-  console.log(JSON.stringify(cart));
+  // console.log(JSON.stringify(cart));
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -66,7 +66,7 @@ export default function Container() {
         <SafeAreaView style={styles.container}>
           <View style={[styles.header, { gap: (MAX_WIDTH * 1) / 2 - 80 }]}>
             <Pressable
-              onPress={() => router.back()}
+              onPress={() => router.navigate("/(tabs)/")}
               style={{ backgroundColor: "#fff", padding: 10, borderRadius: 20 }}
             >
               <AntDesign name="arrowleft" size={20} color="black" />
@@ -87,7 +87,7 @@ export default function Container() {
               <View key={index} style={styles.cartStyle}>
                 <View style={{ flex: 0.2 }}>
                   <Image
-                    source={desc.image}
+                    source={{uri:desc.image}}
                     style={{ width: 50, height: 50 }}
                   />
                 </View>
@@ -170,6 +170,10 @@ export default function Container() {
           </View>
         </SafeAreaView>
       ) : (
+        <View style={styles.container}>
+        <Pressable style={styles.closeButton} onPress={()=>router.navigate("/(tabs)/")}>
+        <AntDesign name="close" size={20} color="#fff" />
+      </Pressable>
         <View
           style={{
             justifyContent: "center",
@@ -185,7 +189,9 @@ export default function Container() {
           />
           <Text>Cart is Empty</Text>
         </View>
+        </View>
       )}
+
       {modalVisible && (
         <Modal
           visible={modalVisible}
@@ -297,5 +303,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  closeButton: {
+    marginTop:50,
+    marginRight:10,
+    alignSelf: "flex-end",
+    backgroundColor: color.gray,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

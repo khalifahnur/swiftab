@@ -1,26 +1,20 @@
 import React, { useState } from "react";
 import { Tabs } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Ionicons } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
 import {
   View,
   TouchableOpacity,
   useWindowDimensions,
   Text,
   StyleSheet,
-  Button,
-  useColorScheme,
 } from "react-native";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import { color, Colors, primary, secondary } from "@/constants/Colors";
+import { color} from "@/constants/Colors";
 import { BlurView } from "expo-blur";
+import useStore from "@/store/useStore";
 
 const TabLayout: React.FC = () => {
-  const window = useWindowDimensions();
-  const BOTTOM_WIDTH = (3.7 / 4) * window.width;
-  const colorScheme = useColorScheme();
+  const {hasActiveReservation} = useStore();
 
   return (
     <>
@@ -166,42 +160,49 @@ const TabLayout: React.FC = () => {
           }}
         />
         {/* reserve screen */}
-        <Tabs.Screen
-          name="(toptabs)"
-          options={{
-            headerShown: true,
-            headerShadowVisible: false,
-            headerTitleAlign: "center",
-            headerStyle: { backgroundColor: "#f5f5f5" },
-            headerTitle: () => (
-              <Text
-                style={{
-                  fontSize: 22,
-                  fontWeight: "600",
-                  color: "#000",
-                  textAlign: "center",
-                }}
-              >
-                Reservation
-              </Text>
-            ),
-
-            tabBarIcon: ({ focused }) => (
-              <View
-                style={[
-                  focused && styles.ActiveIconStyle,
-                  { alignItems: "center" },
-                ]}
-              >
-                <TabBarIcon
-                  name={focused ? "calendar" : "calendar-outline"}
-                  size={20}
-                  color={focused ? color.green : color.black}
+      <Tabs.Screen
+        name="(toptabs)"
+        options={{
+          headerShown: true,
+          headerShadowVisible: false,
+          headerTitleAlign: "center",
+          headerStyle: { backgroundColor: "transparent" },
+          headerTitle: () => (
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "500",
+                color: "#000",
+                textAlign: "center",
+              }}
+            >
+              Reservation
+            </Text>
+          ),
+          tabBarIcon: ({ focused }) => (
+            <View style={{ alignItems: "center" }}>
+              <TabBarIcon
+                name={focused ? "calendar" : "calendar-outline"}
+                size={20}
+                color={focused ? color.green : color.black}
+              />
+              {hasActiveReservation && (
+                <View
+                  style={{
+                    position: "absolute",
+                    top: -5,
+                    right: -5,
+                    backgroundColor: "red",
+                    width: 10,
+                    height: 10,
+                    borderRadius: 5,
+                  }}
                 />
-              </View>
-            ),
-          }}
-        />
+              )}
+            </View>
+          ),
+        }}
+      />
         {/* settings screen */}
         <Tabs.Screen
           name="settings"

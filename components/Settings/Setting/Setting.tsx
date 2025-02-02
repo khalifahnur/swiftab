@@ -1,16 +1,21 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Modal } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import Spinner from "react-native-loading-spinner-overlay";
+import {
+  Ionicons,
+  Entypo,
+  MaterialIcons,
+  FontAwesome,
+} from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from 'expo-router';
+import { BackHandler } from 'react-native';
 import BottomModal from "./BottomModal";
 import { color } from "@/constants/Colors";
+import LottieView from "lottie-react-native";
+import BottomPayment from "./BottomPayment";
+import MpesaModal from "./MpesaModal";
 
 export default function Setting() {
   const router = useRouter();
@@ -19,46 +24,65 @@ export default function Setting() {
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [notOff, setNotOff] = useState(false);
+  const [paymentModal, setPaymentModal] = useState(false);
 
-  const LogOutHandler = async () => {
-    setLoading(true);
+  const [mpesaModal, setMpesaModal] = useState<boolean>(false);
+  
+    const LogOutHandler = async () => {
+      try {
+        await AsyncStorage.clear();
+        
+        // Reset navigation stack
+        router.replace({
+          pathname: "/(auth)/signin",
+          params: {
+            screen: "signin",
+            params: { session: Date.now() }
+          }
+        });
+  
+        // Handle Android back button after logout
+        const backAction = () => {
+          BackHandler.exitApp();
+          return true;
+        };
+  
+        BackHandler.addEventListener('hardwareBackPress', backAction);
+  
+        return () => BackHandler.removeEventListener('hardwareBackPress', backAction);
+  
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
+    };
 
-    try {
-      await AsyncStorage.clear();
-      router.push("/(auth)/signin");
 
-      setTimeout(() => {
-        setLoading(false);
-      }, 3000);
-    } catch (error) {
-      setLoading(false);
-      console.log("Error logging out:", error);
-    }
+  const handleVisible = () => {
+    setPaymentModal(false);
+    setMpesaModal(true)
   };
 
+  const handleVisibleMpesaModal = ()=>{
+    setMpesaModal(false)
+  }
+
   useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  });
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
 
   if (loading) {
     return (
-      <View
-        style={{
-          justifyContent: "center",
-          backgroundColor: "#ecf0f1",
-        }}
-      >
-        <Spinner
-          visible={loading}
-          textContent={"Logout..."}
-          textStyle={{ color: "#FFF" }}
+      <View style={styles.loaderContainer}>
+        <LottieView
+          source={require("@/assets/images/lottie/loader.json")}
+          autoPlay
+          loop
+          style={{ width: 100, height: 100 }}
         />
       </View>
     );
   }
-  
+
   return (
     <>
       <SafeAreaView>
@@ -66,24 +90,21 @@ export default function Setting() {
           <View style={styles.header}>
             <TouchableOpacity
               onPress={() => router.back()}
-              style={{
-                backgroundColor: "#e8e8e8",
-                padding: 10,
-                borderRadius: 20,
-              }}
+              style={styles.backButton}
             >
               <Ionicons name="arrow-back" size={20} color="#000" />
             </TouchableOpacity>
             <Text style={styles.title}>Settings</Text>
           </View>
 
-          {/* notifications */}
-          <TouchableOpacity style={styles.details}>
-            <View style={styles.detail}>
+          {/* Notifications */}
+          <TouchableOpacity
+            style={styles.details}
+            onPress={() => setNotOff(!notOff)}
+          >
+            <View style={styles.detailRow}>
               <Ionicons name="notifications" size={24} color="black" />
-              <Text style={{ marginRight: "auto", marginLeft: 30 }}>
-                Notifications
-              </Text>
+              <Text style={styles.detailText}>Notifications</Text>
               <FontAwesome
                 name={notOff ? "toggle-on" : "toggle-off"}
                 size={24}
@@ -93,31 +114,38 @@ export default function Setting() {
           </TouchableOpacity>
 
           {/* Payment */}
-          <TouchableOpacity style={styles.details}>
-            <View style={styles.detail}>
+          <TouchableOpacity
+            style={styles.details}
+            onPress={() => setPaymentModal(true)}
+          >
+            <View style={styles.detailRow}>
               <MaterialIcons name="language" size={24} color="black" />
-              <Text style={{ marginRight: "auto", marginLeft: 30 }}>
-                Payment
-              </Text>
+              <Text style={styles.detailText}>Payment</Text>
               <Entypo name="chevron-right" size={24} color="black" />
             </View>
           </TouchableOpacity>
-          {/* log out */}
+
+          {/* Log Out */}
           <TouchableOpacity
             style={styles.details}
             onPress={() => setModalVisible(true)}
           >
-            <View style={styles.detail}>
+            <View style={styles.detailRow}>
               <MaterialIcons name="logout" size={24} color="black" />
-              <Text style={{ marginRight: "auto", marginLeft: 30 }}>
-                Log Out
-              </Text>
+              <Text style={styles.detailText}>Log Out</Text>
             </View>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
 
       {modalVisible && <BottomModal logOutHandle={LogOutHandler} />}
+      {paymentModal && <BottomPayment visibleModal={handleVisible}  closeModal={() => setPaymentModal(false)} />}
+
+      <Modal animationType="slide"  visible={mpesaModal}>
+        <MpesaModal 
+        visibilityModal={handleVisibleMpesaModal} 
+        />
+      </Modal>
     </>
   );
 }
@@ -136,7 +164,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    marginLeft: 100,
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+  backButton: {
+    backgroundColor: "#e8e8e8",
+    padding: 10,
+    borderRadius: 20,
   },
   details: {
     marginTop: 10,
@@ -146,10 +180,18 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
   },
-  detail: {
+  detailRow: {
     flexDirection: "row",
+    alignItems: "center",
   },
-  svgCurve: {
-    width: "100%",
+  detailText: {
+    marginRight: "auto",
+    marginLeft: 30,
+    fontSize: 16,
+  },
+  loaderContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
   },
 });

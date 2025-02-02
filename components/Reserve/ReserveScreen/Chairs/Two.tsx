@@ -3,9 +3,9 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 
 type props={
-    id:number;
-    isSelected:boolean;
-    handleTableSelect:(id:number)=>void
+    id?:number;
+    isSelected?:boolean;
+    handleTableSelect?:(id:number)=>void
 }
 
 export default function Two({ id, isSelected, handleTableSelect }:props) {

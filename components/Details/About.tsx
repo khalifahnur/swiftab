@@ -17,10 +17,9 @@ export default function About({ data }) {
         <View>
           <Text style={styles.subtitle}>Description</Text>
           <Text style={styles.txt}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo
-            laborum non, odit eveniet voluptatibus nam pariatur optio minima
-            veritatis eum corporis quidem illum autem facere laudantium dicta
-            possimus necessitatibus accusamus?
+            {
+              data.about.map((item)=>item.description)
+            }
           </Text>
         </View>
       </View>
@@ -29,7 +28,7 @@ export default function About({ data }) {
         <View>
           <Text style={styles.subtitle}>Hours of Operation</Text>
           <Text style={styles.txt}>
-            {data.about.map((item) => item.hrsofoperation)}
+            {data.about.map((item) => item.hrsOfOperation)}
           </Text>
         </View>
       </View>
@@ -38,7 +37,7 @@ export default function About({ data }) {
         <MaterialIcons name="phone" size={20} color="#000" />
         <View>
           <Text style={styles.subtitle}>Phone</Text>
-          <Text style={styles.txt}>+2541122334455</Text>
+          <Text style={styles.txt}>{data.about.map((item) => item.phone)}</Text>
         </View>
       </View>
 
@@ -46,7 +45,7 @@ export default function About({ data }) {
         <MaterialIcons name="email" size={20} color="#000" />
         <View>
           <Text style={styles.subtitle}>Email</Text>
-          <Text style={styles.txt}>abc@gmail.com</Text>
+          <Text style={styles.txt}>{data.about.map((item) => item.email)}</Text>
         </View>
       </View>
 

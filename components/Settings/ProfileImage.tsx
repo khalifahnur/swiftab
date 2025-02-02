@@ -74,7 +74,7 @@ export default function ProfileImage() {
       <Image
         source={{
           uri:
-            image || "https://img.icons8.com/ios/50/user-male-circle--v1.png",
+            image || "https://img.icons8.com/android/80/user.png",
         }}
         style={styles.profileImage}
       />
@@ -88,19 +88,22 @@ export default function ProfileImage() {
 
 const styles = StyleSheet.create({
   profileImage: {
-    width: 80,
-    height: 80,
+    width: 60,
+    height: 60,
     borderRadius: 40,
+    borderColor:color.green,
+    borderWidth:1,
+    alignItems:'center'
   },
   profileName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     marginTop: 10,
   },
   editIconContainer: {
     position: "absolute",
-    right: 15,
-    top: 60,
+    right: 20,
+    top: 45,
     backgroundColor: color.green,
     borderRadius: 15,
     padding: 2,

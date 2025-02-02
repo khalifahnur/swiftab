@@ -8,8 +8,8 @@ const { width: sWidth, height: sHeight } = Dimensions.get("window");
 
 const Location = ({ data }) => {
   const pin = require("@/assets/images/pin.png");
-  const longitude = data.long;
-  const latitude = data.lat;
+  const longitude = data.longitude;
+  const latitude = data.latitude;
 
   const [loaded, setLoaded] = useState(false);
   const cameraRef = useRef<MapboxGL.Camera>(null);

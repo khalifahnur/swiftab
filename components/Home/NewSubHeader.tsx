@@ -6,6 +6,7 @@ type newSubHeaderTitleProps ={
     headerTitle:string;
     btnText?:string;
 }
+
 export default function NewSubHeader({headerTitle,btnText}:newSubHeaderTitleProps) {
   return (
     <View style={styles.header}>

@@ -14,6 +14,6 @@ export default function ConfirmScreen() {
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'#f7f8f8'
+        backgroundColor:'transparent'
     }
 })

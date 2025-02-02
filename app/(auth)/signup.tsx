@@ -68,12 +68,12 @@ const SignUpScreen = () => {
       <SafeAreaView style={styles.container}>
         <ScrollView>
           <View style={styles.header}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => router.back()}
               style={styles.backButton}
             >
               <Text style={styles.backText}>←</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <Text style={styles.title}>Sign Up</Text>
           </View>
@@ -272,12 +272,8 @@ const styles = StyleSheet.create({
   backButton: {
     marginRight: 10,
   },
-  backText: {
-    fontSize: 24,
-    color: "#000",
-  },
   title: {
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: "bold",
     flex: 1,
     textAlign: "center",
@@ -287,7 +283,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   labelTxt: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "500",
     paddingVertical: 9,
   },

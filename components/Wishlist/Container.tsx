@@ -1,21 +1,33 @@
-import { RootState } from '@/redux/store/Store';
-import { removeToWishlist } from '@/redux/WishlistSlice';
-import { router } from 'expo-router';
-import LottieView from 'lottie-react-native';
-import React from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from "@/redux/store/Store";
+import { removeToWishlist } from "@/redux/WishlistSlice";
+import { RestaurantParam } from "@/types";
+import { AntDesign } from "@expo/vector-icons";
+import { FlashList } from "@shopify/flash-list";
+import { router } from "expo-router";
+import LottieView from "lottie-react-native";
+import React from "react";
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+import { useDispatch, useSelector } from "react-redux";
 
 const Container = () => {
-  const wishlistData = useSelector((state: RootState) => state.wishlist.wishlist);
+  const wishlistData = useSelector(
+    (state: RootState) => state.wishlist.wishlist
+  );
   const dispatch = useDispatch();
 
-  const handleRemoveFromWishlist = (id: string) => {
-    dispatch(removeToWishlist(id));
+  const handleRemoveFromWishlist = (_id: string) => {
+    dispatch(removeToWishlist(_id));
   };
 
-  const NavigateHandler = (data) => {
+  const NavigateHandler = (data: RestaurantParam) => {
     router.navigate({
       pathname: "/screens/restaurantdetails",
       params: { data: JSON.stringify(data) },
@@ -24,9 +36,12 @@ const Container = () => {
 
   const renderItem = ({ item }) => (
     <>
-      <TouchableOpacity style={styles.card} onPress={()=>NavigateHandler(item)}>
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() => NavigateHandler(item)}
+      >
         {/* Restaurant Image */}
-        <Image source={item.image} style={styles.image} />
+        <Image source={{ uri: item.image }} style={styles.image} />
 
         {/* Restaurant Details */}
         <View style={styles.details}>
@@ -35,19 +50,15 @@ const Container = () => {
           {/* Wishlist Heart Icon */}
           <TouchableOpacity
             style={styles.heartIcon}
-            onPress={() => handleRemoveFromWishlist(item.id)}
+            onPress={() => handleRemoveFromWishlist(item._id)}
           >
-            <Icon
-              name="heart-sharp"
-              size={20}
-              color="red"
-            />
+            <AntDesign name="heart" size={20} color={"red"} />
           </TouchableOpacity>
 
           {/* Location */}
           <Text style={styles.location} ellipsizeMode="tail" numberOfLines={1}>
             <Icon name="location-outline" size={12} color="#6F7A8A" />
-            {item.about.map((loc) => loc.location).join(', ')} {item.location}
+            {item.about.map((loc) => loc.location).join(", ")} {item.location}
           </Text>
 
           {/* Rating */}
@@ -64,21 +75,21 @@ const Container = () => {
   return (
     <>
       {wishlistData.length > 0 ? (
-        <FlatList
+        <FlashList
+          data={wishlistData}
+          renderItem={renderItem}
           ListHeaderComponent={() => (
-            <View style={{ paddingVertical: 10 }}>
+            <View style={{ paddingVertical: 10,alignItems:'center' }}>
               <Text style={styles.header}>Wishlist</Text>
             </View>
           )}
-          data={wishlistData}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.list}
+          ListHeaderComponentStyle={{marginBottom:10}}
+          estimatedItemSize={200}
         />
       ) : (
         <View style={styles.emptyContainer}>
           <LottieView
-            source={require('@/assets/images/lottie/emptywishlist.json')}
+            source={require("@/assets/images/lottie/emptywishlist.json")}
             autoPlay
             loop
             style={{ width: 100, height: 100 }}
@@ -91,26 +102,31 @@ const Container = () => {
 };
 
 const styles = StyleSheet.create({
-  list: {
-    paddingHorizontal: 10,
-  },
   card: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     borderRadius: 15,
     marginBottom: 10,
+    paddingHorizontal:20
   },
   image: {
     width: 70,
     height: 80,
+    borderRadius:20
   },
   heartIcon: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     right: 5,
-    backgroundColor: '#d4d4d4',
     padding: 5,
     borderRadius: 20,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth:1,
+    borderColor:"transparent",
+    width: 40,
+    height: 40,
   },
   details: {
     padding: 5,
@@ -118,39 +134,39 @@ const styles = StyleSheet.create({
   },
   restaurantName: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 2,
   },
   location: {
-    color: '#6F7A8A',
+    color: "#6F7A8A",
     fontSize: 12,
     marginBottom: 5,
   },
   ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   ratingText: {
     marginLeft: 5,
-    color: '#6F7A8A',
+    color: "#6F7A8A",
     fontSize: 14,
   },
   divider: {
-    width: '100%',
-    borderColor: '#d8d8d8',
+    width: "100%",
+    borderColor: "#d8d8d8",
     borderWidth: 1,
     marginBottom: 10,
   },
   emptyContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     flex: 1,
   },
   header: {
-    fontSize: 22,
-    color: '#000',
-    textAlign: 'left',
-    fontWeight: '500',
+    fontSize: 16,
+    color: "#000",
+    textAlign: "left",
+    fontWeight: "500",
   },
 });
 

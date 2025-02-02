@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,11 +9,63 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { color } from "@/constants/Colors";
+import { useForgotPassword } from "@/hooks/authhooks/authhooks";
+import Toast from "react-native-toast-message";
 
 const ForgotScreen = () => {
   const [email, setEmail] = useState("");
 
   const router = useRouter();
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    } else {
+      setIsDisabled(false);
+    }
+  }, [countdown]);
+
+  const forgotPsswdMutation = useForgotPassword();
+
+  const handleForgotPassword = async (email: string) => {
+    if (isDisabled) return;
+
+    // Validate email
+    if (!email || email.trim() === "") {
+      setError("Email is required");
+      return;
+    }
+
+    try {
+      setIsDisabled(true);
+      setCountdown(10);
+
+      await forgotPsswdMutation.mutateAsync(email);
+
+      Toast.show({
+        type: "success",
+        text1: "Verification Code Sent!",
+        text2: "Please check your email for the verification code.",
+      });
+
+      router.push({pathname:"/(auth)/codeverify",params:{email}});
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Failed to Send Verification Code",
+        text2: error instanceof Error ? error.message : "An error occurred.",
+      });
+
+      setIsDisabled(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -30,17 +82,18 @@ const ForgotScreen = () => {
             onChangeText={setEmail}
             style={styles.input}
           />
+          {error && <Text style={styles.errorText}>{error}</Text>}
         </View>
       </View>
 
       <TouchableOpacity
         style={styles.loginButton}
-        onPress={() => router.push("/(auth)/codeverify")}
+        onPress={() => handleForgotPassword(email)}
+        disabled={isDisabled}
       >
-        <Text style={styles.loginButtonText}>Send Code</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.resendButton}>
-        <Text style={styles.resendBtnTxt}>Resend Code</Text>
+        <Text style={styles.loginButtonText}>
+          {isDisabled ? `Resend in ${countdown}s` : "Send Code"}
+        </Text>
       </TouchableOpacity>
 
       <View style={styles.signinContainer}>
@@ -62,19 +115,19 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   title: {
-    marginVertical:24,
-    fontSize: 28,
+    marginVertical: 24,
+    fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
   },
   subTitle: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: "400",
     textAlign: "center",
     marginBottom: 24,
   },
   labelTxt: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "500",
     paddingVertical: 10,
   },
@@ -121,5 +174,10 @@ const styles = StyleSheet.create({
   },
   signinLink: {
     color: "#2563EB",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 4,
   },
 });

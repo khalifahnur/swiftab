@@ -1,41 +1,76 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native";
+import useStore from "@/store/useStore";
 
-type props={
-    id:number;
-    isSelected:boolean;
-    handleTableSelect:(id:number)=>void
-}
-export default function Four({ id, isSelected, handleTableSelect }:props) {
+type props = {
+  id: string;
+  isSelected?: boolean;
+  isAvailable?: boolean;
+  handleTableSelect?: (id: string) => void;
+  customStyle?: object;
+};
+
+export default function CircFour({
+  id,
+  isSelected,
+  isAvailable,
+  handleTableSelect,
+  customStyle,
+}: props) {
+  const { selectedTableId, setSelectedTable } = useStore();
+
   return (
-    <View key={id} style={styles.tableContainer}>
-      {/* Top row of chairs */}
+    <View style={[styles.tableContainer, customStyle]}>
       <View style={styles.chairRow}>
         <View style={styles.emptySpace} />
-        <View style={[styles.chairUp, styles.chairActive]} />
+        <View
+          style={[
+            styles.chairUp,
+            isAvailable ? styles.chairActive : styles.chairInactive,
+          ]}
+        />
         <View style={styles.emptySpace} />
       </View>
 
-      {/* Middle row with chairs and table */}
       <View style={styles.chairRow}>
-        <View style={[styles.chairLeft, styles.chairActive]} />
+        <View
+          style={[
+            styles.chairLeft,
+            isAvailable ? styles.chairActive : styles.chairInactive,
+          ]}
+        />
         <TouchableOpacity
           style={[
             styles.table,
-            isSelected ? styles.tableSelected : styles.tableActive,
+            selectedTableId === id
+              ? styles.tableSelected
+              : isAvailable
+              ? styles.tableActive
+              : styles.tableInactive,
           ]}
-          onPress={() => handleTableSelect(id)}
+          onPress={() => setSelectedTable(id)}
+          disabled={!isAvailable}
         >
           <Text style={styles.tableText}>{id}</Text>
         </TouchableOpacity>
-        <View style={[styles.chairRight, styles.chairActive]} />
+
+        <View
+          style={[
+            styles.chairRight,
+            isAvailable ? styles.chairActive : styles.chairInactive,
+          ]}
+        />
       </View>
 
-      {/* Bottom row of chairs */}
       <View style={styles.chairRow}>
         <View style={styles.emptySpace} />
-        <View style={[styles.chairDown, styles.chairActive]} />
+        <View
+          style={[
+            styles.chairDown,
+            isAvailable ? styles.chairActive : styles.chairInactive,
+          ]}
+        />
         <View style={styles.emptySpace} />
       </View>
     </View>
@@ -52,32 +87,32 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   chairDown: {
-    width: 20,
-    height: 20,
+    width: 15,
+    height: 15,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     backgroundColor: "#2ecc71",
     margin: 5,
   },
   chairUp: {
-    width: 20,
-    height: 20,
+    width: 15,
+    height: 15,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     backgroundColor: "#2ecc71",
     margin: 5,
   },
   chairLeft: {
-    width: 20,
-    height: 20,
+    width: 15,
+    height: 15,
     borderTopLeftRadius: 20,
     borderBottomLeftRadius: 20,
     backgroundColor: "#2ecc71",
     margin: 5,
   },
   chairRight: {
-    width: 20,
-    height: 20,
+    width: 15,
+    height: 15,
     borderTopRightRadius: 20,
     borderBottomRightRadius: 20,
     backgroundColor: "#2ecc71",
@@ -97,13 +132,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#3498db",
   },
   tableActive: {
-    backgroundColor: "#3498db",
+    backgroundColor: "#3ce747",
   },
   tableSelected: {
-    backgroundColor: "#f39c12",
+    backgroundColor: "blue",
   },
   tableText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  chairActive: {
+    backgroundColor: "#3ce747",
+  },
+  chairInactive: {
+    backgroundColor: "#e74c3c",
+  },
+  tableInactive: {
+    backgroundColor: "#e74c3c",
   },
 });

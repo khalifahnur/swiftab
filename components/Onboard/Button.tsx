@@ -8,15 +8,16 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import {theme} from '@/constants/themes/theme'
+import { theme } from '@/constants/themes/theme';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Data } from './Screens';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const AnimatedFeather = Animated.createAnimatedComponent(Feather);
 
 type ButtonProps = {
-  flatListRef: RefObject<FlatList>;
+  flatListRef: RefObject<FlatList<Data>>;
   flatListIndex: SharedValue<number>;
   dataLength: number;
 };
@@ -41,11 +42,10 @@ export function Button({
     return {
       opacity: withTiming(isLastScreen ? 0 : 1, { duration: 300 }),
       transform: [
-        { translateX: withTiming(isLastScreen ? 10 : 0, { duration: 300 }) },
+        { translateX: withTiming(isLastScreen ? 100 : 0, { duration: 300 }) },
       ],
     };
   });
-  
 
   const textAnimationStyle = useAnimatedStyle(() => {
     const isLastScreen = flatListIndex.value === dataLength - 1;
@@ -57,11 +57,11 @@ export function Button({
     };
   });
 
-  const handleNextScreen = async() => {
+  const handleNextScreen = async () => {
     const isLastScreen = flatListIndex.value === dataLength - 1;
     if (!isLastScreen) {
       flatListRef.current?.scrollToIndex({ index: flatListIndex.value + 1 });
-    }else{
+    } else {
       await AsyncStorage.setItem('hasSeenOnboard', 'true');
       router.replace('/(auth)/');
     }

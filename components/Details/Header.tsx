@@ -9,7 +9,10 @@ import React from "react";
 import { useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 
-export default function Header({headerText}) {
+interface prop {
+  headerText?:string
+}
+export default function Header({headerText}:prop) {
   const route = useRouter();
   const window = useWindowDimensions();
   const MAX_WIDTH = window.width;
@@ -17,9 +20,9 @@ export default function Header({headerText}) {
     <View style={[styles.header, { gap: (MAX_WIDTH * 1) / 2 - 100 }]}>
       <Pressable
         onPress={() => route.back()}
-        style={{ backgroundColor: "#d8d8d8", padding: 10, borderRadius: 20 }}
+        style={{ backgroundColor: "#fff", padding: 5, borderRadius: 30 ,borderWidth:1,borderColor:"#e8e8e8"}}
       >
-        <AntDesign name="left" size={20} color="black" />
+        <AntDesign name="arrowleft" size={20} color="black" />
       </Pressable>
       <Text
         style={{

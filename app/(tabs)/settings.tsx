@@ -8,7 +8,7 @@ import { color } from '@/constants/Colors';
 export default function SettingsScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style='dark' backgroundColor='#f8f8f8' />
+      <StatusBar backgroundColor={color.green} style='auto' />
       <Container />
     </SafeAreaView>
   )

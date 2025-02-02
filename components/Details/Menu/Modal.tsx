@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Image, ImageBackground, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
 import DetailsTabs from "./DetailsTab";
@@ -75,7 +75,8 @@ export default function ModalScreen({
     >
       <>
         <View style={styles.overlay}>
-          <View style={styles.upperContainer}>
+          <ImageBackground source={{uri:data?.image}} resizeMode="cover"
+                  imageStyle={styles.upperContainer} style={{flex:1}}>
             <View style={styles.header}>
               <Pressable
                 style={styles.iconButton}
@@ -84,10 +85,10 @@ export default function ModalScreen({
                 <Ionicons name="close" size={20} color="black" />
               </Pressable>
             </View>
-            <View style={styles.img}>
-              <Image source={data?.image} style={styles.image} />
-            </View>
-          </View>
+            {/* <View style={styles.img}>
+              <Image source={{uri:data?.image}} style={styles.image} />
+            </View> */}
+          </ImageBackground>
 
           <View style={styles.bottomContainer}>
             <View style={styles.productDetails}>
@@ -155,11 +156,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2F4F7",
   },
   upperContainer: {
-    backgroundColor: color.green,
+    //backgroundColor: color.green,
     borderBottomLeftRadius: 200,
     borderBottomRightRadius: 200,
     paddingBottom: 20,
-    flex: 0.6,
+    flex: 1,
   },
   header: {
     flexDirection: "row",

@@ -6,7 +6,11 @@ type detailProp = {
   bookingDate: string;
   formattedDateTime: string;
   guestCount: number;
-  selectedTableId: number | null;
+  selectedTableId: string | null;
+  selectedFloor:string,
+  name:string;
+  email:string;
+  phoneNumber:string;
 };
 
 export default function Details({
@@ -14,22 +18,27 @@ export default function Details({
   formattedDateTime,
   guestCount,
   selectedTableId,
+  selectedFloor,
+  name,
+  email,
+  phoneNumber
 }: detailProp) {
+
   return (
-    <Receipt>
+    // <Receipt>
       <View style={styles.summary}>
         <View style={styles.sections}>
           <Text style={styles.sectionTitle}>Name</Text>
-          <Text style={styles.sectionContent}>khalif noor</Text>
+          <Text style={styles.sectionContent}>{name}</Text>
         </View>
         <View style={styles.sections}>
           <Text style={styles.sectionTitle}>Email</Text>
-          <Text style={styles.sectionContent}>khalif@gmail.com</Text>
+          <Text style={styles.sectionContent}>{email}</Text>
         </View>
 
         <View style={styles.sections}>
           <Text style={styles.sectionTitle}>Phone Number</Text>
-          <Text style={styles.sectionContent}>0745194060</Text>
+          <Text style={styles.sectionContent}>{`+254 ${phoneNumber}`}</Text>
         </View>
 
         <View style={styles.sections}>
@@ -54,15 +63,15 @@ export default function Details({
 
         <View style={styles.sections}>
           <Text style={styles.sectionTitle}>Table Number</Text>
-          <Text style={styles.sectionContent}>T-{selectedTableId}</Text>
+          <Text style={styles.sectionContent}>{selectedTableId}</Text>
         </View>
 
         <View style={styles.sections}>
-          <Text style={styles.sectionTitle}>Floor</Text>
-          <Text style={styles.sectionContent}>1</Text>
+          <Text style={styles.sectionTitle}>Dining Area</Text>
+          <Text style={styles.sectionContent}>{selectedFloor}</Text>
         </View>
       </View>
-    </Receipt>
+
   );
 }
 
@@ -90,7 +99,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     width: "100%",
-    borderColor: "#e1e1e1",
+    borderColor: "#000",
     borderWidth: 1,
     marginVertical: 10,
     borderStyle:'dashed'

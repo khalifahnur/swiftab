@@ -8,7 +8,7 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/st/icon.png",
+      "image": "./assets/images/st/preview.png",
       "resizeMode": "contain",
       "backgroundColor": "#008080"
     },
@@ -20,6 +20,7 @@
         "foregroundImage": "./assets/images/st/preview.png",
         "backgroundColor": "#008080"
       },
+      "googleServicesFile": "./google-services.json",
       "package": "com.lifkha.swiftab"
     },
     "plugins": [
@@ -50,7 +51,17 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
-      ]
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/st/icon.png",
+          "color": "#ffffff",
+          "defaultChannel": "default",
+          "enableBackgroundRemoteNotifications": false
+        }
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true

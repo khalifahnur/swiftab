@@ -9,13 +9,14 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { color } from "@/constants/Colors";
+import { color, Colors } from "@/constants/Colors";
 import { loginSchema } from "@/validation/auth/ValidationSchemas";
 import { Formik } from "formik";
 import { useLogin } from "@/hooks/authhooks/authhooks";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 const LoginScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -39,7 +40,7 @@ const LoginScreen = () => {
 
       setTimeout(() => {
         handleLogin();
-      }, 2000);
+      }, 1000);
       
     } else if (signInMutation.isError) {
       Toast.show({
@@ -51,11 +52,8 @@ const LoginScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor={color.green}/>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.navigate("/(auth)/")} style={styles.backButton}>
-          <Text style={styles.backText}>←</Text>
-        </TouchableOpacity>
-
         <Text style={styles.title}>Log In</Text>
       </View>
       <Formik
@@ -196,14 +194,14 @@ const styles = StyleSheet.create({
     color: "#000",             
   },
   title: {
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: "bold",
     flex: 1,                   
     textAlign: "center",   
     color: "#000",            
   },
   labelTxt: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "500",
     paddingVertical: 10,
   },

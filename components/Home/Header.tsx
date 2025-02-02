@@ -10,12 +10,12 @@ import { RootState } from "@/redux/store/Store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
-type headerProps = {
-  headerLayout:(event: LayoutChangeEvent) => void;
-  //marginBottomPosition:number;
-}
+// type headerProps = {
+//   headerLayout:(event: LayoutChangeEvent) => void;
+//   //marginBottomPosition:number;
+// }
 
-export default function Header({headerLayout}:headerProps) {
+export default function Header() {
   const [greeting, setGreeting] = useState<string>("");
   const [userData, setUserData] = useState({});
 
@@ -47,7 +47,7 @@ export default function Header({headerLayout}:headerProps) {
   }, []);
   return (
     <View 
-    onLayout={headerLayout}
+    //onLayout={headerLayout}
     style={styles.container}>
       <View style={styles.header}>
         <View>

@@ -1,11 +1,6 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+// MapContainer.js
+import React, { useRef } from "react";
+import { StyleSheet, useWindowDimensions, View } from "react-native";
 import Mapbox, {
   Camera,
   UserLocation,
@@ -15,136 +10,69 @@ import Mapbox, {
   Images,
   CircleLayer,
 } from "@rnmapbox/maps";
-import * as Location from "expo-location";
 import { color } from "@/constants/Colors";
 import RestaurantsList from "./RestaurantsList";
-import opencage from "opencage-api-client";
-import restaurants from "@/components/Data";
 import SearchComponent from "./SearchComponent";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function MapContainer() {
+Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_KEY || "");
+
+export default function MapContainer({
+  restaurantsData,
+  userLocation,
+  displayAddress,
+}) {
   const pin = require("../../../assets/images/pin.png");
-  const mapbox_key = process.env.EXPO_PUBLIC_MAPBOX_KEY;
-  const [locationPermission, setLocationPermission] = useState<boolean | null>(
-    null
-  );
-  const [displayCurrentAddress, setDisplayCurrentAddress] = useState('Location Loading.....');
   const ref = useRef(null);
   const window = useWindowDimensions();
-  const CARD_WIDTH = window.width * 0.8;
-
-  // const coords = restaurants.map((item)=>item.data.map((item)=>item.location))
-  // const flattenedLocations = coords.flat();
-
-  // const reverseGeocodeMultiple = async (locations) => {
-  //   const key = process.env.EXPO_PUBLIC_OPENCAGE_API;
-  //   try {
-  //     const promises = locations.map(async (place) => {
-  //       const { results } = await opencage.geocode({ key, q: place });
-  //       return results[0]?.geometry; // Extract only the geometry part
-  //     });
-  
-  //     const resolvedResults = await Promise.all(promises);
-  //     console.log(resolvedResults); // Optional: Log geometry data
-  //     setA(resolvedResults); // Store geometry results in state
-  //   } catch (error) {
-  //     console.log("error", error.message);
-  //   }
-  // };
-
-  Mapbox.setAccessToken(mapbox_key || "");
-
-  useEffect(() => {
-    // Request location permission
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      //get current position lat and long
-      const {coords} = await Location.getCurrentPositionAsync();  
-      //console.log(coords)
-      
-      if(coords){
-       const {latitude,longitude} =coords;
-       //console.log(latitude,longitude);
-
-      //provide lat and long to get the the actual address
-       let responce = await Location.reverseGeocodeAsync({           
-         latitude,
-         longitude
-       });
-       //console.log(responce);
-       //loop on the responce to get the actual result
-       for(let item of responce ){
-        let address = `${item.name} ${item.city} ${item.postalCode}`
-         setDisplayCurrentAddress(address)
-       }
-      if (status !== "granted") {
-        alert("Permission to access location was denied");
-        return;
-      }
-      setLocationPermission(true);
-    }})();
-  }, []);
-
-  if (!locationPermission) {
-    return <Text>Requesting location permission...</Text>;
-  }
-
-  
+  const CARD_WIDTH = window.width * 0.75;
 
   const AvailableRes = {
     type: "FeatureCollection",
-    features: restaurants.flatMap((item)=>item.data.flatMap((item)=>({
-      type: "Feature",
-    geometry: {
-      type: "Point",
-      coordinates: [item.long, item.lat],
-    },
-    properties: {
-      id: item.id,
-      name: item.restaurantName,
-      description: item.location,
-    },
-    })
-      
-  ))
+    features: restaurantsData.flatMap((item) =>
+      item.data.map((restaurant) => ({
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [restaurant.longitude, restaurant.latitude],
+        },
+        properties: {
+          id: restaurant._id,
+          name: restaurant.restaurantName,
+          description: restaurant.location,
+        },
+      }))
+    ),
   };
 
   const HandlePress = (id) => {
-    // Find the exact index across nested data
-    let index = -1;
-    for (let i = 0; i < restaurants.length; i++) {
-      const itemIndex = restaurants[i].data.findIndex(
-        (restaurant) => restaurant.id === id
-      );
-      if (itemIndex !== -1) {
-        index = itemIndex + i * restaurants[i].data.length;
-        break;
-      }
-    }
-  
+    const restaurants = restaurantsData.flatMap((section) => section.data);
+    const index = restaurants.findIndex((item) => item._id === id);
+
     if (ref.current && index !== -1) {
-      ref.current.scrollToOffset({
-        // 240 is the width value + padding for card
-        offset: index * (240),
-        animated: true,
-      });
+      const offset = index * CARD_WIDTH;
+      ref.current.scrollToOffset({ offset, animated: true });
     }
   };
-  
 
   return (
-    <>
+    <SafeAreaView style={styles.container}>
       <View style={styles.search}>
-        <SearchComponent placeholderTxt={displayCurrentAddress}/>
+        <SearchComponent placeholderTxt={displayAddress} />
       </View>
+
       <MapView style={styles.map}>
-        <Camera followUserLocation={true} followZoomLevel={16} />
+        <Camera
+          zoomLevel={12}
+          centerCoordinate={[userLocation.longitude, userLocation.latitude]}
+        />
         <UserLocation visible={true} showsUserHeadingIndicator={true} />
+
         <ShapeSource
           id="restaurants"
           cluster
           shape={AvailableRes}
-          onPress={(e) => HandlePress(e.features[0].properties.id)}
+          onPress={(e) => HandlePress(e.features?.[0]?.properties?.id)}
         >
           <CircleLayer id="cluster" style={{ circleColor: color.green }} />
           <SymbolLayer
@@ -159,25 +87,39 @@ export default function MapContainer() {
           <Images images={{ pin }} />
         </ShapeSource>
       </MapView>
+
       <View style={styles.res}>
-        <RestaurantsList data={restaurants} scrollViewRef={ref} />
+        <RestaurantsList
+          data={restaurantsData}
+          scrollViewRef={ref}
+          cardWidth={CARD_WIDTH}
+        />
       </View>
-      
-    </>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  map: {
+  container: {
     flex: 1,
     position: "relative",
   },
-  res:{
-    flex:.3,
-    paddingVertical:2
+  map: {
+    flex: 1,
   },
-  search:{
-    paddingHorizontal:10,
-    paddingVertical:10
-  }
+  res: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: "20%",
+    paddingVertical: 2,
+    width: "100%",
+  },
+  search: {
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    zIndex: 1,
+    backgroundColor:'transparent'
+  },
 });

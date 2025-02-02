@@ -25,7 +25,7 @@ export default function Info({ data }) {
         </View>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
           <MaterialIcons name="star-rate" size={20} color="yellow" />
-          <Text style={styles.ratetxt}>{data.rate}(365) reviews</Text>
+          <Text style={styles.ratetxt}>{data.rate}(100) reviews</Text>
         </View>
       </View>
 
@@ -38,14 +38,14 @@ export default function Info({ data }) {
           <View style={{ flexDirection: "row", gap: 10 }}>
             <Octicons name="dot-fill" size={20} color="#000" />
             <Text style={styles.txt}>
-              {data.about.map((item) => item.cuisine)}
+              Kenyan
             </Text>
           </View>
         </View>
         <View style={{ flexDirection: "row", gap: 10, paddingTop: 10 }}>
           <EvilIcons name="location" size={20} color="#000" />
           <Text style={styles.txt}>
-            {data.about.map((item) => item.location)}, {data.location}
+             {data.location}
           </Text>
         </View>
       </View>
